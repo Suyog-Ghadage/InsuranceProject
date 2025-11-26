@@ -51,7 +51,7 @@ public class DocumentController {
         }
     }
 
-    // View in browser
+
     @GetMapping("/view/{documentId}")
     public ResponseEntity<Resource> viewDocument(@PathVariable Long documentId) {
         try {
@@ -75,7 +75,7 @@ public class DocumentController {
         }
     }
 
-    // Download document
+
     @GetMapping("/download/{documentId}")
     public ResponseEntity<Resource> downloadDocument(@PathVariable Long documentId) {
         try {

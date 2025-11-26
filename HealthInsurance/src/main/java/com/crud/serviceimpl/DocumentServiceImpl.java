@@ -40,23 +40,23 @@ public class DocumentServiceImpl implements DocumentService {
     @Autowired
     private EmailService emailService;
 
-    // Absolute path for uploads
+
     private final String uploadDir = System.getProperty("user.dir") + File.separator + "uploads" + File.separator;
 
     @Override
     public Document storeFile(MultipartFile file, Long userId, String documentName) {
         try {
-            // Ensure upload directory exists
+
             File dir = new File(uploadDir);
             if (!dir.exists() && !dir.mkdirs()) {
                 throw new RuntimeException("Failed to create upload directory at: " + dir.getAbsolutePath());
             }
 
-            // Generate unique filename
+
             String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
             String fullPath = uploadDir + fileName;
 
-            // Save file
+
             file.transferTo(new File(fullPath));
 
             User user = userRepository.findById(userId)
@@ -71,7 +71,7 @@ public class DocumentServiceImpl implements DocumentService {
 
             Document savedDoc = documentRepository.save(document);
 
-            // Notify first Super Admin
+
             List<Admin> superAdmins = adminRepository.findByRole(Role.SUPER_ADMIN);
             if (!superAdmins.isEmpty()) {
                 String superAdminEmail = superAdmins.get(0).getEmail();

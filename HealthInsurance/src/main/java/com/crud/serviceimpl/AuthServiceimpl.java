@@ -52,7 +52,7 @@ public class AuthServiceimpl implements AuthService {
 
 
         if (user.getOtpGeneratedAt() == null ||
-                user.getOtpGeneratedAt().plusMinutes(5).isBefore(LocalDateTime.now())) {
+                user.getOtpGeneratedAt().plusMinutes(1).isBefore(LocalDateTime.now())) {
             throw new RuntimeException("OTP expired");
         }
 

@@ -39,14 +39,14 @@ public class AdminController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // DTO for login (email only)
+
     public static class LoginRequest {
         private String email;
         public String getEmail() { return email; }
         public void setEmail(String email) { this.email = email; }
     }
 
-    // DTO for OTP verification
+
     public static class VerifyOtpRequest {
         private String email;
         private String otp;
@@ -58,13 +58,13 @@ public class AdminController {
         public void setOtp(String otp) { this.otp = otp; }
     }
 
-    // Register Admin (Super Admin)
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Admin admin) {
         try {
             Admin saved = adminService.registerAdmin(admin);
 
-            // Send email
+
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(admin.getEmail());
             message.setSubject("Congratulations! Your registration has been successfully completed, and you’ve been added as an Admin on our platform.");
@@ -87,7 +87,7 @@ public class AdminController {
 
         Admin admin = optionalAdmin.get();
 
-        // If SUPER_ADMIN → check password
+
         if (admin.getRole() == Role.SUPER_ADMIN) {
             if (admin.getPassword() == null || !passwordEncoder.matches(request.getPassword(), admin.getPassword())) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid password");
@@ -105,7 +105,7 @@ public class AdminController {
             return ResponseEntity.ok(response);
         }
 
-        // ✅ Otherwise (normal admin) → send OTP
+
         String otp = String.format("%06d", new Random().nextInt(1_000_000));
         admin.setOtp(otp);
         adminService.save(admin);
@@ -119,7 +119,7 @@ public class AdminController {
         return ResponseEntity.ok("OTP sent to email");
     }
 
-    // Verify OTP + JWT
+
     @PostMapping("/verify-otp")
     public ResponseEntity<?> verifyOtp(@RequestBody VerifyOtpRequest request) {
         Optional<Admin> optionalAdmin = adminService.findByEmail(request.getEmail());
@@ -130,6 +130,16 @@ public class AdminController {
 
         if (admin.getOtp() == null || request.getOtp() == null || !request.getOtp().equals(admin.getOtp())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid OTP");
+        }
+
+        java.time.LocalDateTime otpTime = admin.getOtpGeneratedAt();
+        if (otpTime == null || otpTime.plusMinutes(1).isBefore(java.time.LocalDateTime.now())) {
+
+            admin.setOtp(null);
+            admin.setOtpGeneratedAt(null);
+            adminService.save(admin);
+
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("OTP expired. Please request a new OTP.");
         }
 
         adminService.save(admin);
@@ -145,16 +155,15 @@ public class AdminController {
         return ResponseEntity.ok(response);
     }
 
-    // ------------------- Other Admin APIs -------------------
 
-    // Get all Admins
+
+
     @GetMapping("/all")
     public ResponseEntity<List<Admin>> getAllAdmins() {
         return ResponseEntity.ok(adminService.getAllAdmins());
     }
 
-    // ------------------- NEW API -------------------
-    // Get Admin by ID
+
     @GetMapping("/{adminId}")
     public ResponseEntity<?> getAdminById(@PathVariable Long adminId) {
         Optional<Admin> optionalAdmin = adminService.findById(adminId);
@@ -163,7 +172,7 @@ public class AdminController {
         return ResponseEntity.ok(optionalAdmin.get());
     }
 
-    // Update Admin
+
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateAdmin(@PathVariable Long id, @RequestBody Admin updatedAdmin) {
         Optional<Admin> optionalAdmin = adminService.findById(id);
@@ -181,7 +190,7 @@ public class AdminController {
         return ResponseEntity.ok(savedAdmin);
     }
 
-    // Delete Admin
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteAdmin(@PathVariable Long id) {
         Optional<Admin> optionalAdmin = adminService.findById(id);
@@ -191,7 +200,7 @@ public class AdminController {
         return ResponseEntity.ok("Admin deleted successfully");
     }
 
-    // Update nominee by Admin
+
     @PutMapping("/update-nominee/{policyId}")
     public ResponseEntity<UserPolicyResponse> updateNomineeByAdmin(
             @PathVariable Long policyId,
@@ -215,7 +224,7 @@ public class AdminController {
         return ResponseEntity.ok(response);
     }
 
-    // Activate user policy
+
     @PutMapping("/activate-policy/{policyId}")
     public ResponseEntity<UserPolicyResponse> activatePolicy(@PathVariable Long policyId) {
         UserPolicy updated = adminService.activatePolicy(policyId);
@@ -233,7 +242,7 @@ public class AdminController {
         return ResponseEntity.ok(response);
     }
 
-    // Reject user policy
+
     @PutMapping("/reject-policy/{policyId}")
     public ResponseEntity<UserPolicyResponse> rejectPolicy(@PathVariable Long policyId) {
         UserPolicy updated = adminService.rejectPolicy(policyId);
@@ -275,7 +284,7 @@ public class AdminController {
     }
 
 
-    // Scheduled task: expire policies daily at midnight
+
     @Scheduled(cron = "0 0 0 * * ?")
     public void expirePolicies() {
         adminService.expireExpiredPolicies();

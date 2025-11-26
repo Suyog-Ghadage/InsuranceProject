@@ -30,7 +30,7 @@ public class CrudOperationApplication {
 			if (!superAdminExists) {
 				Admin superAdmin = new Admin();
 				superAdmin.setEmail("ghadagesuyog3@gmail.com");
-			//  superAdmin.setUsername("SUPER_ADMIN");
+			  superAdmin.setUsername("SUPER_ADMIN");
 				superAdmin.setRole(Role.SUPER_ADMIN);
 
 				String rawPassword = "SuperAdmin@123";

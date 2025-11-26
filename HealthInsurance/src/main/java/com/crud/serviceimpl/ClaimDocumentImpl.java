@@ -23,7 +23,7 @@ public class ClaimDocumentImpl implements ClaimDocumentService {
     private final ClaimRepository claimRepository;
     private final ClaimDocumentRepository claimDocumentRepository;
 
-    // Absolute path to store uploads
+
     private final String uploadDir = System.getProperty("user.home") + "/uploads/";
 
     public ClaimDocumentImpl(ClaimRepository claimRepository, ClaimDocumentRepository claimDocumentRepository) {
@@ -36,7 +36,7 @@ public class ClaimDocumentImpl implements ClaimDocumentService {
         Claim claim = claimRepository.findById(claimId)
                 .orElseThrow(() -> new RuntimeException("Claim not found"));
 
-        // Ensure upload directory exists
+
         Path dirPath = Paths.get(uploadDir);
         Files.createDirectories(dirPath);
 
@@ -100,7 +100,7 @@ public class ClaimDocumentImpl implements ClaimDocumentService {
         ClaimDocument document = claimDocumentRepository.findById(claimDocumentId)
                 .orElseThrow(() -> new RuntimeException("Document not found with ID: " + claimDocumentId));
 
-        // Delete file from disk
+
         Path filePath = Paths.get(document.getFilePath());
         try {
             Files.deleteIfExists(filePath);
@@ -108,7 +108,7 @@ public class ClaimDocumentImpl implements ClaimDocumentService {
             throw new RuntimeException("Failed to delete file from disk", e);
         }
 
-        // Delete from database
+
         claimDocumentRepository.delete(document);
     }
 }

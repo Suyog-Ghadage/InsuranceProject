@@ -21,7 +21,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/api/admin-policy")
 public class AdminPolicyController {
 
     @Autowired

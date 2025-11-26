@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +31,8 @@ public class Admin {
     private Role role;
 
     @JsonIgnore
-    private String otp; // OTP for login (for normal admins only)
+    private String otp;
+    private LocalDateTime otpGeneratedAt;
 
     @OneToOne(mappedBy = "admin", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIgnore
@@ -40,7 +42,7 @@ public class Admin {
     @JsonIgnore
     private List<PolicyPlan> policyPlans = new ArrayList<>();
 
-    // Getters and Setters
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -80,4 +82,11 @@ public class Admin {
     public void setPolicyPlans(List<PolicyPlan> policyPlans) { this.policyPlans = policyPlans; }
 
 
+    public LocalDateTime getOtpGeneratedAt() {
+        return otpGeneratedAt;
+    }
+
+    public void setOtpGeneratedAt(LocalDateTime otpGeneratedAt) {
+        this.otpGeneratedAt = otpGeneratedAt;
+    }
 }

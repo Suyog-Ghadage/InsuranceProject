@@ -13,6 +13,5 @@ public interface DocumentService {
     Document updateDocument(Long documentId, MultipartFile file, String documentName);
     void deleteDocument(Long documentId);
 
-    // download/view support
     Resource loadFileAsResource(Long documentId);
 }

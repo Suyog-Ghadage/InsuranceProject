@@ -16,7 +16,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/claims")
+@RequestMapping("/api/claims-documents")
 public class ClaimDocumentController {
 
     private final ClaimDocumentService claimDocumentService;
@@ -25,7 +25,7 @@ public class ClaimDocumentController {
         this.claimDocumentService = claimDocumentService;
     }
 
-    // Upload single document
+
 //    @PostMapping("/{claimId}/documents/single")
 //    public ResponseEntity<ClaimDocument> uploadSingleDocument(
 //            @PathVariable Long claimId,
@@ -36,7 +36,7 @@ public class ClaimDocumentController {
 //        return ResponseEntity.ok(doc);
 //    }
 
-    // Upload multiple documents
+
     @PostMapping("/{claimId}/documents/multiple")
     public ResponseEntity<List<ClaimDocument>> uploadMultipleDocuments(
             @PathVariable Long claimId,
@@ -47,13 +47,13 @@ public class ClaimDocumentController {
         return ResponseEntity.ok(docs);
     }
 
-    // List all documents of claim
+
     @GetMapping("/{claimId}/documents")
     public ResponseEntity<List<ClaimDocument>> getClaimDocuments(@PathVariable Long claimId) {
         return ResponseEntity.ok(claimDocumentService.getClaimDocuments(claimId));
     }
 
-    // View inline
+
     @GetMapping("/documents/view/{claimDocumentId}")
     public ResponseEntity<Resource> viewDocument(@PathVariable Long claimDocumentId) {
         try {
@@ -75,7 +75,7 @@ public class ClaimDocumentController {
         }
     }
 
-    // Download
+
     @GetMapping("/documents/download/{claimDocumentId}")
     public ResponseEntity<Resource> downloadDocument(@PathVariable Long claimDocumentId) {
         try {
@@ -97,7 +97,7 @@ public class ClaimDocumentController {
         }
     }
 
-    // Delete
+
     @DeleteMapping("/documents/{claimDocumentId}")
     public ResponseEntity<String> deleteDocument(@PathVariable Long claimDocumentId) {
         try {
