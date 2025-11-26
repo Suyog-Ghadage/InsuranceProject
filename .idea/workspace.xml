@@ -10,7 +10,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="845bf92b-1c85-440b-bed8-5bacfa7b65cd" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/controller/ClaimDocumentController 2.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/entity/Admin 2.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/service/ClaimDocumentService 2.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/service/DocumentService 2.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/serviceimpl/ClaimDocumentImpl 2.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/serviceimpl/DocumentServiceImpl 2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HealthInsurance/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/.idea/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/HealthInsurance/src/main/java/com/crud/CrudOperationApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/src/main/java/com/crud/CrudOperationApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/HealthInsurance/src/main/java/com/crud/controller/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/src/main/java/com/crud/controller/AdminController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/HealthInsurance/src/main/java/com/crud/controller/AdminPolicyController.java" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/src/main/java/com/crud/controller/AdminPolicyController.java" afterDir="false" />
@@ -29,19 +36,17 @@
       <change beforePath="$PROJECT_DIR$/HealthInsurance/src/main/java/com/crud/serviceimpl/DocumentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/src/main/java/com/crud/serviceimpl/DocumentServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/HealthInsurance/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/HealthInsurance/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/target/classes/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/CrudOperationApplication.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/controller/AdminController$LoginRequest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/controller/AdminController$VerifyOtpRequest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/controller/AdminController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/CrudOperationApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/CrudOperationApplication.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/controller/AdminController.class" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/controller/AdminController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/controller/AdminPolicyController.class" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/controller/AdminPolicyController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/controller/AppointmentController.class" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/controller/AppointmentController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/controller/ClaimDocumentController.class" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/controller/ClaimDocumentController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/controller/DocumentController.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/controller/FAQController.class" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/controller/FAQController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/controller/HospitalController.class" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/controller/HospitalController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/controller/UserController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/controller/UserPolicyController.class" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/controller/UserPolicyController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/entity/Admin.class" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/entity/Admin.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/serviceimpl/AuthServiceimpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/serviceimpl/AuthServiceimpl.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,6 +87,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
     "Application.CrudOperationApplication.executor": "Run",
     "Maven.CrudOperation [clean].executor": "Run",
     "Maven.CrudOperation [install].executor": "Run",
