@@ -135,11 +135,9 @@ public class AdminController {
         java.time.LocalDateTime otpTime = admin.getOtpGeneratedAt();
         if (otpTime == null || otpTime.plusMinutes(1).isBefore(java.time.LocalDateTime.now())) {
 
-            admin.setOtp(null);
             admin.setOtpGeneratedAt(null);
             adminService.save(admin);
 
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("OTP expired. Please request a new OTP.");
         }
 
         adminService.save(admin);
@@ -154,8 +152,6 @@ public class AdminController {
 
         return ResponseEntity.ok(response);
     }
-
-
 
 
     @GetMapping("/all")
