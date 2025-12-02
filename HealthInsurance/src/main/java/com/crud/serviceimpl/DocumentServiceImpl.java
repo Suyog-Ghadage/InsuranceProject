@@ -23,6 +23,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -40,8 +41,17 @@ public class DocumentServiceImpl implements DocumentService {
     @Autowired
     private EmailService emailService;
 
-
     private final String uploadDir = System.getProperty("user.dir") + File.separator + "uploads" + File.separator;
+
+
+    private static final Set<String> ALLOWED_CONTENT_TYPES = Set.of(
+            "application/pdf",
+            "image/jpeg",
+            "image/jpg",
+            "image/png"
+    );
+
+    private static final long MAX_FILE_SIZE_BYTES = 2L * 1024L * 1024L;
 
     @Override
     public Document storeFile(MultipartFile file, Long userId, String documentName) {
@@ -52,10 +62,10 @@ public class DocumentServiceImpl implements DocumentService {
                 throw new RuntimeException("Failed to create upload directory at: " + dir.getAbsolutePath());
             }
 
+            validateFile(file);
 
-            String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+            String fileName = UUID.randomUUID() + "_" + sanitizeFilename(file.getOriginalFilename());
             String fullPath = uploadDir + fileName;
-
 
             file.transferTo(new File(fullPath));
 
@@ -68,9 +78,10 @@ public class DocumentServiceImpl implements DocumentService {
             document.setOriginalFileName(file.getOriginalFilename());
             document.setUploadedAt(LocalDateTime.now());
             document.setFilePath(fullPath);
+            document.setContentType(normalizeContentType(file.getContentType()));
+            document.setFileSize(file.getSize());
 
             Document savedDoc = documentRepository.save(document);
-
 
             List<Admin> superAdmins = adminRepository.findByRole(Role.SUPER_ADMIN);
             if (!superAdmins.isEmpty()) {
@@ -117,13 +128,19 @@ public class DocumentServiceImpl implements DocumentService {
                 File oldFile = new File(existingDoc.getFilePath());
                 if (oldFile.exists()) oldFile.delete();
 
-                String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+                validateFile(file);
+
+                String fileName = UUID.randomUUID() + "_" + sanitizeFilename(file.getOriginalFilename());
                 String fullPath = uploadDir + fileName;
                 file.transferTo(new File(fullPath));
 
                 existingDoc.setFilePath(fullPath);
                 existingDoc.setOriginalFileName(file.getOriginalFilename());
                 existingDoc.setUploadedAt(LocalDateTime.now());
+
+
+                existingDoc.setContentType(normalizeContentType(file.getContentType()));
+                existingDoc.setFileSize(file.getSize());
             }
 
             return documentRepository.save(existingDoc);
@@ -155,5 +172,31 @@ public class DocumentServiceImpl implements DocumentService {
         } catch (MalformedURLException e) {
             throw new RuntimeException("File not found: " + doc.getFilePath(), e);
         }
+    }
+
+
+    private void validateFile(MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            throw new RuntimeException("Uploaded file is empty");
+        }
+
+        String contentType = normalizeContentType(file.getContentType());
+        if (contentType == null || !ALLOWED_CONTENT_TYPES.contains(contentType)) {
+            throw new RuntimeException("Only PDF and Image (JPG, JPEG, PNG) files are allowed");
+        }
+
+        if (file.getSize() > MAX_FILE_SIZE_BYTES) {
+            throw new RuntimeException("File too large. Maximum allowed size is 2 MB");
+        }
+    }
+
+    private String normalizeContentType(String contentType) {
+        if (contentType == null) return null;
+        return contentType.toLowerCase().trim();
+    }
+
+    private String sanitizeFilename(String original) {
+        if (original == null) return "file";
+        return original.replaceAll("[^a-zA-Z0-9\\.\\-_]", "_");
     }
 }

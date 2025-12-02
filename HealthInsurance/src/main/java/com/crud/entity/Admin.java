@@ -32,7 +32,7 @@ public class Admin {
 
     @JsonIgnore
     private String otp;
-    private LocalDateTime otpGeneratedAt;
+    private java.time.LocalDateTime otpGeneratedAt;
 
     @OneToOne(mappedBy = "admin", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIgnore

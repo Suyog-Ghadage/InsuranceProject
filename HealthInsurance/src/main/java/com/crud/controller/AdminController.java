@@ -18,6 +18,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @RestController
@@ -64,7 +66,6 @@ public class AdminController {
         try {
             Admin saved = adminService.registerAdmin(admin);
 
-
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(admin.getEmail());
             message.setSubject("Congratulations! Your registration has been successfully completed, and you’ve been added as an Admin on our platform.");
@@ -79,6 +80,7 @@ public class AdminController {
         }
     }
 
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody PasswordLoginRequest request) {
         Optional<Admin> optionalAdmin = adminService.findByEmail(request.getEmail());
@@ -86,7 +88,6 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Admin not found");
 
         Admin admin = optionalAdmin.get();
-
 
         if (admin.getRole() == Role.SUPER_ADMIN) {
             if (admin.getPassword() == null || !passwordEncoder.matches(request.getPassword(), admin.getPassword())) {
@@ -104,16 +105,15 @@ public class AdminController {
 
             return ResponseEntity.ok(response);
         }
-
-
         String otp = String.format("%06d", new Random().nextInt(1_000_000));
         admin.setOtp(otp);
+        admin.setOtpGeneratedAt(LocalDateTime.now()); // <-- save timestamp
         adminService.save(admin);
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(admin.getEmail());
         message.setSubject("Your Login OTP");
-        message.setText("Your OTP is: " + otp);
+        message.setText("Your OTP is: " + otp + "\n\nNote: This OTP is valid for 1 minute.");
         mailSender.send(message);
 
         return ResponseEntity.ok("OTP sent to email");
@@ -128,19 +128,34 @@ public class AdminController {
 
         Admin admin = optionalAdmin.get();
 
-        if (admin.getOtp() == null || request.getOtp() == null || !request.getOtp().equals(admin.getOtp())) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid OTP");
+        if (admin.getOtp() == null || request.getOtp() == null || request.getOtp().trim().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or missing OTP");
         }
 
-        java.time.LocalDateTime otpTime = admin.getOtpGeneratedAt();
-        if (otpTime == null || otpTime.plusMinutes(1).isBefore(java.time.LocalDateTime.now())) {
+        if (!request.getOtp().equals(admin.getOtp())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect OTP");
+        }
 
+        LocalDateTime otpTime = admin.getOtpGeneratedAt();
+        if (otpTime == null) {
+            admin.setOtp(null);
             admin.setOtpGeneratedAt(null);
             adminService.save(admin);
-
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("OTP expired. Please request a new OTP.");
         }
 
+        long minutesElapsed = Duration.between(otpTime, LocalDateTime.now()).toMinutes();
+        if (minutesElapsed >= 1) {
+            admin.setOtp(null);
+            admin.setOtpGeneratedAt(null);
+            adminService.save(admin);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("OTP expired. Please request a new OTP.");
+        }
+
+        admin.setOtp(null);
+        admin.setOtpGeneratedAt(null);
         adminService.save(admin);
+
         String token = jwtUtil.generateToken(admin.getEmail(), admin.getRole().name());
 
         Map<String, Object> response = new HashMap<>();

@@ -12,6 +12,11 @@ public class ClaimDocument {
 
     private String documentName;
     private String documentType;
+
+
+    private String contentType;
+    private Long fileSize;
+
     private String filePath;
     private LocalDate uploadedDate;
 
@@ -42,6 +47,22 @@ public class ClaimDocument {
 
     public void setDocumentType(String documentType) {
         this.documentType = documentType;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public Long getFileSize() {
+        return fileSize;
+    }
+
+    public void setFileSize(Long fileSize) {
+        this.fileSize = fileSize;
     }
 
     public String getFilePath() {
