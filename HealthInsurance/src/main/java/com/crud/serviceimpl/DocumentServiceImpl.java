@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
@@ -42,7 +41,6 @@ public class DocumentServiceImpl implements DocumentService {
     private EmailService emailService;
 
     private final String uploadDir = System.getProperty("user.dir") + File.separator + "uploads" + File.separator;
-
 
     private static final Set<String> ALLOWED_CONTENT_TYPES = Set.of(
             "application/pdf",
@@ -83,6 +81,7 @@ public class DocumentServiceImpl implements DocumentService {
 
             Document savedDoc = documentRepository.save(document);
 
+            // notify super admin (if exists)
             List<Admin> superAdmins = adminRepository.findByRole(Role.SUPER_ADMIN);
             if (!superAdmins.isEmpty()) {
                 String superAdminEmail = superAdmins.get(0).getEmail();
@@ -137,8 +136,6 @@ public class DocumentServiceImpl implements DocumentService {
                 existingDoc.setFilePath(fullPath);
                 existingDoc.setOriginalFileName(file.getOriginalFilename());
                 existingDoc.setUploadedAt(LocalDateTime.now());
-
-
                 existingDoc.setContentType(normalizeContentType(file.getContentType()));
                 existingDoc.setFileSize(file.getSize());
             }
@@ -174,6 +171,14 @@ public class DocumentServiceImpl implements DocumentService {
         }
     }
 
+    @Override
+    public List<Document> getDocumentsByUserId(Long userId) {
+        // validate user exists
+        if (!userRepository.existsById(userId)) {
+            throw new RuntimeException("User not found with ID: " + userId);
+        }
+        return documentRepository.findAllByUserUserId(userId);
+    }
 
     private void validateFile(MultipartFile file) {
         if (file == null || file.isEmpty()) {

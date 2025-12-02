@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -51,6 +50,18 @@ public class DocumentController {
         }
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> getDocumentsByUserId(@PathVariable Long userId) {
+        try {
+            List<Document> docs = documentService.getDocumentsByUserId(userId);
+            return ResponseEntity.ok(docs);
+        } catch (RuntimeException e) {
+            // thrown when user not found
+            return ResponseEntity.status(404).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Failed to fetch documents: " + e.getMessage());
+        }
+    }
 
     @GetMapping("/view/{documentId}")
     public ResponseEntity<Resource> viewDocument(@PathVariable Long documentId) {
@@ -74,7 +85,6 @@ public class DocumentController {
             return ResponseEntity.status(500).body(null);
         }
     }
-
 
     @GetMapping("/download/{documentId}")
     public ResponseEntity<Resource> downloadDocument(@PathVariable Long documentId) {

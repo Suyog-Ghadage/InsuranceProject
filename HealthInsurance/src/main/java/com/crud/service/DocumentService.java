@@ -14,4 +14,7 @@ public interface DocumentService {
     void deleteDocument(Long documentId);
 
     Resource loadFileAsResource(Long documentId);
+
+    // new method to fetch by user id
+    List<Document> getDocumentsByUserId(Long userId);
 }

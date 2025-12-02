@@ -69,9 +69,9 @@ public class AdminController {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(admin.getEmail());
             message.setSubject("Congratulations! Your registration has been successfully completed, and you’ve been added as an Admin on our platform.");
-            message.setText("You can now log in using your registered email address by clicking the link below:\n\n"
+            message.setText("You can now log in using your registered email address \n\n"
                     + "Email: " + admin.getEmail() + "\n"
-                    + "Login URL: http://your-app-url/login  Login Here"); // Replace with actual login URL
+                    + "Login at Footer :Agent login (Login link Here)");
             mailSender.send(message);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(saved);
