@@ -30,11 +30,17 @@ public class UserPolicyController {
         UserPolicyResponse response = new UserPolicyResponse(
                 userPolicy.getId(),
                 userPolicy.getUserId(),
+                userPolicy.getUserName(),
                 userPolicy.getPolicyStatus(),
                 userPolicy.getStartDate(),
                 userPolicy.getEndDate(),
                 userPolicy.getNominee(),
-                userPolicy.getNomineeRelation()
+                userPolicy.getNomineeRelation(),
+                userPolicy.getGender(),
+                userPolicy.getDob(),
+                userPolicy.getAadhaarNumber(),
+                userPolicy.getAge()
+
         );
         return ResponseEntity.ok(response);
     }
@@ -46,11 +52,16 @@ public class UserPolicyController {
                 .map(policy -> new UserPolicyResponse(
                         policy.getId(),
                         policy.getUserId(),
+                        policy.getUserName(),
                         policy.getPolicyStatus(),
                         policy.getStartDate(),
                         policy.getEndDate(),
                         policy.getNominee(),
-                        policy.getNomineeRelation()
+                        policy.getNomineeRelation(),
+                        policy.getGender(),
+                        policy.getDob(),
+                        policy.getAadhaarNumber(),
+                        policy.getAge()
                 ))
 
                 .toList();
@@ -65,13 +76,17 @@ public class UserPolicyController {
                 .map(policy -> new UserPolicyResponse(
                         policy.getId(),
                         policy.getUserId(),
+                        policy.getUserName(),
                         policy.getPolicyStatus(),
                         policy.getStartDate(),
                         policy.getEndDate(),
                         policy.getNominee(),
-                        policy.getNomineeRelation()
+                        policy.getNomineeRelation(),
+                        policy.getGender(),
+                        policy.getDob(),
+                        policy.getAadhaarNumber(),
+                        policy.getAge()
                 ))
-
                 .toList();
 
         return ResponseEntity.ok(policies);
@@ -88,11 +103,16 @@ public class UserPolicyController {
         UserPolicyResponse response = new UserPolicyResponse(
                 policy.getId(),
                 policy.getUserId(),
+                policy.getUserName(),
                 policy.getPolicyStatus(),
                 policy.getStartDate(),
                 policy.getEndDate(),
                 policy.getNominee(),
-                policy.getNomineeRelation()
+                policy.getNomineeRelation(),
+                policy.getGender(),
+                policy.getDob(),
+                policy.getAadhaarNumber(),
+                policy.getAge()
         );
 
         return ResponseEntity.ok(response);

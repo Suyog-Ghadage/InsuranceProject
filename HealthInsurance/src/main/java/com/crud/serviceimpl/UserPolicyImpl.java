@@ -28,6 +28,11 @@ public class UserPolicyImpl implements UserPolicyService {
 
         UserPolicy userPolicy = UserPolicy.builder()
                 .userId(request.getUserId())
+                .userName(request.getUserName())
+                .gender(request.getGender())
+                .dob(request.getDob())
+                .aadhaarNumber(request.getAadhaarNumber())
+                .age(request.getAge())
                 .policyPlan(plan)
                 .startDate(LocalDate.now())
                 .endDate(LocalDate.now().plusYears(plan.getDurationInYears()))

@@ -22,5 +22,9 @@ public class PendingPolicyResponse {
     private LocalDate endDate;
     private String nominee;
     private String nomineeRelation;
+    private String gender;
+    private LocalDate dob;
+    private String aadhaarNumber;
+    private Integer age;
 
 }

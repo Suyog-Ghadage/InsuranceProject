@@ -21,6 +21,13 @@ public class UserPolicy {
     private Long id;
 
     private Long userId;
+    private String userName;
+
+    private String gender;
+    private LocalDate dob;
+    private String aadhaarNumber;
+    private Integer age;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "policy_plan_id")

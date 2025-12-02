@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class  ContactForm {
+public class ContactForm {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

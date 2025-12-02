@@ -225,11 +225,16 @@ public class AdminController {
         UserPolicyResponse response = new UserPolicyResponse(
                 updatedPolicy.getId(),
                 updatedPolicy.getUserId(),
+                updatedPolicy.getUserName(),
                 updatedPolicy.getPolicyStatus(),
                 updatedPolicy.getStartDate(),
                 updatedPolicy.getEndDate(),
                 updatedPolicy.getNominee(),
-                updatedPolicy.getNomineeRelation()
+                updatedPolicy.getNomineeRelation(),
+                updatedPolicy.getGender(),
+                updatedPolicy.getDob(),
+                updatedPolicy.getAadhaarNumber(),
+                updatedPolicy.getAge()
         );
 
         return ResponseEntity.ok(response);
@@ -243,11 +248,16 @@ public class AdminController {
         UserPolicyResponse response = new UserPolicyResponse(
                 updated.getId(),
                 updated.getUserId(),
+                updated.getUserName(),
                 updated.getPolicyStatus(),
                 updated.getStartDate(),
                 updated.getEndDate(),
                 updated.getNominee(),
-                updated.getNomineeRelation()
+                updated.getNomineeRelation(),
+                updated.getGender(),
+                updated.getDob(),
+                updated.getAadhaarNumber(),
+                updated.getAge()
         );
 
         return ResponseEntity.ok(response);
@@ -261,11 +271,16 @@ public class AdminController {
         UserPolicyResponse response = new UserPolicyResponse(
                 updated.getId(),
                 updated.getUserId(),
+                updated.getUserName(),
                 updated.getPolicyStatus(),
                 updated.getStartDate(),
                 updated.getEndDate(),
                 updated.getNominee(),
-                updated.getNomineeRelation()
+                updated.getNomineeRelation(),
+                updated.getGender(),
+                updated.getDob(),
+                updated.getAadhaarNumber(),
+                updated.getAge()
         );
 
         return ResponseEntity.ok(response);

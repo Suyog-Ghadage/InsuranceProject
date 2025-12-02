@@ -1,52 +1,24 @@
 package com.crud.dto;
 
+import lombok.*;
+
+import java.time.LocalDate;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
+@Getter
 public class PurchaseRequest {
 
     private Long userId;
+    private String userName;
     private Long policyId;
     private String nominee;
     private String nomineeRelation;
+    private String gender;
+    private LocalDate dob;
+    private String aadhaarNumber;
+    private Integer age;
 
-    public PurchaseRequest(Long userId, Long policyId, String nominee, String nomineeRelation) {
-        this.userId = userId;
-        this.policyId = policyId;
-        this.nominee = nominee;
-        this.nomineeRelation = nomineeRelation;
-    }
-
-    public PurchaseRequest(){
-
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Long getPolicyId() {
-        return policyId;
-    }
-
-    public void setPolicyId(Long policyId) {
-        this.policyId = policyId;
-    }
-
-    public String getNominee() {
-        return nominee;
-    }
-
-    public void setNominee(String nominee) {
-        this.nominee = nominee;
-    }
-
-    public String getNomineeRelation() {
-        return nomineeRelation;
-    }
-
-    public void setNomineeRelation(String nomineeRelation) {
-        this.nomineeRelation = nomineeRelation;
-    }
 }
