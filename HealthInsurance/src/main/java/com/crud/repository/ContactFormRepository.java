@@ -9,8 +9,7 @@ import java.util.Optional;
 @Repository
 public interface ContactFormRepository extends JpaRepository<ContactForm ,Long > {
 
+    Optional<ContactForm> findByEmail(String email);
 
-
-
-
+    Optional<ContactForm> findByPanNumber(String panNumber);
 }

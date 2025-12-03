@@ -5,9 +5,11 @@ import com.crud.dto.PasswordLoginRequest;
 import com.crud.dto.PendingPolicyResponse;
 import com.crud.dto.UserPolicyResponse;
 import com.crud.entity.Admin;
+import com.crud.entity.ContactForm;
 import com.crud.entity.UserPolicy;
 import com.crud.enums.Role;
 import com.crud.service.AdminService;
+import com.crud.service.ContactFormService;
 import com.crud.service.UserPolicyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,12 +24,16 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 
+
 @RestController
 @RequestMapping("/api/admin")
 public class AdminController {
 
     @Autowired
     private AdminService adminService;
+
+    @Autowired
+    private ContactFormService contactFormService; // used to find saved contact form
 
     @Autowired
     private JavaMailSender mailSender;
@@ -61,11 +67,44 @@ public class AdminController {
     }
 
 
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Admin admin) {
+        // 1) Lookup contact form by email first, then by PAN if not found
+        String lookupEmail = admin.getEmail() == null ? "" : admin.getEmail().trim();
+        String lookupPan = admin.getPanNumber() == null ? "" : admin.getPanNumber().trim();
+
+        Optional<ContactForm> contactOpt = Optional.empty();
+        if (!lookupEmail.isEmpty()) {
+            contactOpt = contactFormService.findByEmail(lookupEmail);
+        }
+        if (contactOpt.isEmpty() && !lookupPan.isEmpty()) {
+            contactOpt = contactFormService.findByPanNumber(lookupPan);
+        }
+
+        if (contactOpt.isEmpty()) {
+            Map<String, Object> body = new HashMap<>();
+            body.put("message", "Admin registration blocked: no ContactForm found for provided email or PAN.");
+            body.put("required", Arrays.asList("username (must match ContactForm.name)", "email", "panNumber", "mobileNumber"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+        }
+
+        ContactForm cf = contactOpt.get();
+
+
+        List<String> mismatches = findContactAdminMismatches(cf, admin);
+        if (!mismatches.isEmpty()) {
+            Map<String, Object> body = new HashMap<>();
+            body.put("message", "Admin registration blocked: fields do not exactly match ContactForm.");
+            body.put("contactFormId", cf.getId());
+            body.put("mismatches", mismatches);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+        }
+
         try {
             Admin saved = adminService.registerAdmin(admin);
 
+            // send success email (existing behavior)
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(admin.getEmail());
             message.setSubject("Congratulations! Your registration has been successfully completed, and you’ve been added as an Admin on our platform.");
@@ -76,6 +115,7 @@ public class AdminController {
 
             return ResponseEntity.status(HttpStatus.CREATED).body(saved);
         } catch (RuntimeException ex) {
+            // adminService.registerAdmin throws on uniqueness or other business rules
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }
@@ -314,5 +354,45 @@ public class AdminController {
     @Scheduled(cron = "0 0 0 * * ?")
     public void expirePolicies() {
         adminService.expireExpiredPolicies();
+    }
+
+
+    private static List<String> findContactAdminMismatches(ContactForm cf, Admin admin) {
+        List<String> mismatches = new ArrayList<>();
+
+        if (cf == null) {
+            mismatches.add("No contact form found for the provided identifier.");
+            return mismatches;
+        }
+
+
+        String contactName = cf.getName() == null ? "" : cf.getName().trim();
+        String adminUsername = admin.getUsername() == null ? "" : admin.getUsername().trim();
+        if (!contactName.equals(adminUsername)) {
+            mismatches.add("username does not match contact name. contact='" + contactName + "' vs admin='" + adminUsername + "'");
+        }
+
+
+        String contactEmail = cf.getEmail() == null ? "" : cf.getEmail().trim();
+        String adminEmail = admin.getEmail() == null ? "" : admin.getEmail().trim();
+        if (!contactEmail.equals(adminEmail)) {
+            mismatches.add("email does not match. contact='" + contactEmail + "' vs admin='" + adminEmail + "'");
+        }
+
+
+        String contactPan = cf.getPanNumber() == null ? "" : cf.getPanNumber().trim();
+        String adminPan = admin.getPanNumber() == null ? "" : admin.getPanNumber().trim();
+        if (!contactPan.equals(adminPan)) {
+            mismatches.add("panNumber does not match. contact='" + contactPan + "' vs admin='" + adminPan + "'");
+        }
+
+
+        String contactMobile = cf.getMobileNumber() == null ? "" : cf.getMobileNumber().trim();
+        String adminMobile = admin.getMobileNumber() == null ? "" : admin.getMobileNumber().trim();
+        if (!contactMobile.equals(adminMobile)) {
+            mismatches.add("mobileNumber does not match. contact='" + contactMobile + "' vs admin='" + adminMobile + "'");
+        }
+
+        return mismatches;
     }
 }

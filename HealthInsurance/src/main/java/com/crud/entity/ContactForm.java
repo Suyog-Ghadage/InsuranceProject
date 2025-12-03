@@ -25,9 +25,4 @@ public class ContactForm {
     private String correspondenceAddress;
     private String permanentAddress;
     private String panNumber;
-
-    @Enumerated(EnumType.STRING)
-    private ContactRole role;    // ADMIN or USER
-
-
 }
