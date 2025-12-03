@@ -175,7 +175,7 @@ public class PolicyPlanImpl implements PolicyPlanservice {
                     return new UserDetailsResponse(
                             user.getId(),
                             user.getName(),
-                            user.getEmail()
+                            user.getUser().getEmail()
                     );
                 })
                 .collect(Collectors.toList());

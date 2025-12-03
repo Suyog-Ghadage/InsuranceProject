@@ -143,7 +143,6 @@ public class AdminController {
 
             return ResponseEntity.status(HttpStatus.CREATED).body(saved);
         } catch (RuntimeException ex) {
-            // adminService.registerAdmin throws on uniqueness or other business rules
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
     }

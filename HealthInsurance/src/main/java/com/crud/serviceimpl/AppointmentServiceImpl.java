@@ -59,17 +59,28 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         Appointment savedAppointment = appointmentRepository.save(appointment);
 
+        // Fetch patient's email from linked User (UserProfile no longer has email)
+        String patientEmail = "N/A";
+        if (userProfile.getUser() != null && userProfile.getUser().getEmail() != null) {
+            patientEmail = userProfile.getUser().getEmail();
+        }
+
         //  Send email to doctor
         String subject = "New Appointment Booking Alert";
         String body = "Hello " + doctor.getDoctorName() + ",\n\n" +
                 "A new appointment has been booked by the user:\n\n" +
                 "Name: " + userProfile.getName() + "\n" +
-                "Email: " + userProfile.getEmail() + "\n" +
+                "Email: " + patientEmail + "\n" +
                 "Phone: " + (userProfile.getPhone() != null ? userProfile.getPhone() : "N/A") + "\n" +
                 "Appointment Date: " + request.getAppointmentDate() + "\n\n" +
                 "Regards,\nClinic Management System";
 
-        emailService.sendEmail(doctor.getEmail(), subject, body);
+        // only attempt to send if doctor's email is present
+        if (doctor.getEmail() != null && !doctor.getEmail().trim().isEmpty()) {
+            emailService.sendEmail(doctor.getEmail(), subject, body);
+        } else {
+            // optional: log warning that doctor has no email
+        }
 
         return savedAppointment;
     }
