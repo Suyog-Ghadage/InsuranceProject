@@ -1,13 +1,13 @@
 package com.crud.dto;
-
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
-@Getter
 public class UserPolicyResponse {
 
         private Long id;
@@ -16,16 +16,21 @@ public class UserPolicyResponse {
         private String policyStatus;
         private LocalDate startDate;
         private LocalDate endDate;
+
         private String nominee;
         private String nomineeRelation;
+
         private String gender;
         private LocalDate dob;
         private String aadhaarNumber;
         private Integer age;
 
-
-
+        // POLICY DETAILS
+        private Long policyId;
+        private String policyName;
+        private String policyType;
+        private Double premium;
+        private Double coverage;
+        private Integer durationInYears;
+        private String imageURL;
 }
-
-
-

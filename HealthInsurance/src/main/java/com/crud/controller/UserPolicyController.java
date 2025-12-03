@@ -22,10 +22,40 @@ public class UserPolicyController {
     @Autowired
     private UserPolicyService userPolicyService;
 
+    // ✅ ADD THIS METHOD HERE (before any @GetMapping / @PostMapping)
+    private UserPolicyResponse mapToResponse(UserPolicy policy) {
+        PolicyPlan plan = policy.getPolicyPlan();
+
+        return new UserPolicyResponse(
+                policy.getId(),
+                policy.getUserId(),
+                policy.getUserName(),
+                policy.getPolicyStatus(),
+                policy.getStartDate(),
+                policy.getEndDate(),
+                policy.getNominee(),
+                policy.getNomineeRelation(),
+                policy.getGender(),
+                policy.getDob(),
+                policy.getAadhaarNumber(),
+                policy.getAge(),
+
+                plan.getId(),
+                plan.getPolicyName(),
+                plan.getPolicyType(),
+                plan.getPremium(),
+                plan.getCoverage(),
+                plan.getDurationInYears(),
+                plan.getImageUrl()
+        );
+    }
+
 
     @PostMapping("/purchase")
     public ResponseEntity<UserPolicyResponse> purchasePolicy(@RequestBody PurchaseRequest request) {
         UserPolicy userPolicy = userPolicyService.purchasePolicy(request);
+
+        PolicyPlan plan = userPolicy.getPolicyPlan(); // get policy details
 
         UserPolicyResponse response = new UserPolicyResponse(
                 userPolicy.getId(),
@@ -39,7 +69,15 @@ public class UserPolicyController {
                 userPolicy.getGender(),
                 userPolicy.getDob(),
                 userPolicy.getAadhaarNumber(),
-                userPolicy.getAge()
+                userPolicy.getAge(),
+
+                plan.getId(),
+                plan.getPolicyName(),
+                plan.getPolicyType(),
+                plan.getPremium(),
+                plan.getCoverage(),
+                plan.getDurationInYears(),
+                plan.getImageUrl()
 
         );
         return ResponseEntity.ok(response);
@@ -49,21 +87,7 @@ public class UserPolicyController {
     public ResponseEntity<List<UserPolicyResponse>> getUserPolicies(@PathVariable Long userId) {
         List<UserPolicyResponse> policies = userPolicyService.getAllPoliciesByUserId(userId)
                 .stream()
-                .map(policy -> new UserPolicyResponse(
-                        policy.getId(),
-                        policy.getUserId(),
-                        policy.getUserName(),
-                        policy.getPolicyStatus(),
-                        policy.getStartDate(),
-                        policy.getEndDate(),
-                        policy.getNominee(),
-                        policy.getNomineeRelation(),
-                        policy.getGender(),
-                        policy.getDob(),
-                        policy.getAadhaarNumber(),
-                        policy.getAge()
-                ))
-
+                .map(this::mapToResponse)
                 .toList();
 
         return ResponseEntity.ok(policies);
@@ -73,20 +97,7 @@ public class UserPolicyController {
     public ResponseEntity<List<UserPolicyResponse>> getAllPolicies() {
         List<UserPolicyResponse> policies = userPolicyService.getAllPolicies()
                 .stream()
-                .map(policy -> new UserPolicyResponse(
-                        policy.getId(),
-                        policy.getUserId(),
-                        policy.getUserName(),
-                        policy.getPolicyStatus(),
-                        policy.getStartDate(),
-                        policy.getEndDate(),
-                        policy.getNominee(),
-                        policy.getNomineeRelation(),
-                        policy.getGender(),
-                        policy.getDob(),
-                        policy.getAadhaarNumber(),
-                        policy.getAge()
-                ))
+                .map(this::mapToResponse)
                 .toList();
 
         return ResponseEntity.ok(policies);
@@ -100,30 +111,15 @@ public class UserPolicyController {
 
         UserPolicy policy = userPolicyService.updatePolicy(policyId, updatedPolicy);
 
-        UserPolicyResponse response = new UserPolicyResponse(
-                policy.getId(),
-                policy.getUserId(),
-                policy.getUserName(),
-                policy.getPolicyStatus(),
-                policy.getStartDate(),
-                policy.getEndDate(),
-                policy.getNominee(),
-                policy.getNomineeRelation(),
-                policy.getGender(),
-                policy.getDob(),
-                policy.getAadhaarNumber(),
-                policy.getAge()
-        );
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(mapToResponse(policy));
     }
+
 
     @DeleteMapping("/delete/{policyId}")
     public ResponseEntity<String> deletePolicy(@PathVariable Long policyId) {
         userPolicyService.deletePolicy(policyId);
         return ResponseEntity.ok("Policy with ID " + policyId + " deleted successfully.");
     }
-
 
 
 }

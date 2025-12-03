@@ -6,6 +6,7 @@ import com.crud.dto.PendingPolicyResponse;
 import com.crud.dto.UserPolicyResponse;
 import com.crud.entity.Admin;
 import com.crud.entity.ContactForm;
+import com.crud.entity.PolicyPlan;
 import com.crud.entity.UserPolicy;
 import com.crud.enums.Role;
 import com.crud.service.AdminService;
@@ -65,12 +66,39 @@ public class AdminController {
         public String getOtp() { return otp; }
         public void setOtp(String otp) { this.otp = otp; }
     }
+    private UserPolicyResponse mapToResponse(UserPolicy policy) {
+        PolicyPlan plan = policy.getPolicyPlan();
+
+        return new UserPolicyResponse(
+                policy.getId(),
+                policy.getUserId(),
+                policy.getUserName(),
+                policy.getPolicyStatus(),
+                policy.getStartDate(),
+                policy.getEndDate(),
+                policy.getNominee(),
+                policy.getNomineeRelation(),
+                policy.getGender(),
+                policy.getDob(),
+                policy.getAadhaarNumber(),
+                policy.getAge(),
+
+                plan.getId(),
+                plan.getPolicyName(),
+                plan.getPolicyType(),
+                plan.getPremium(),
+                plan.getCoverage(),
+                plan.getDurationInYears(),
+                plan.getImageUrl()
+        );
+    }
+
 
 
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Admin admin) {
-        // 1) Lookup contact form by email first, then by PAN if not found
+
         String lookupEmail = admin.getEmail() == null ? "" : admin.getEmail().trim();
         String lookupPan = admin.getPanNumber() == null ? "" : admin.getPanNumber().trim();
 
@@ -262,70 +290,19 @@ public class AdminController {
 
         UserPolicy updatedPolicy = userPolicyService.updateNomineeDetails(policyId, nominee, nomineeRelation);
 
-        UserPolicyResponse response = new UserPolicyResponse(
-                updatedPolicy.getId(),
-                updatedPolicy.getUserId(),
-                updatedPolicy.getUserName(),
-                updatedPolicy.getPolicyStatus(),
-                updatedPolicy.getStartDate(),
-                updatedPolicy.getEndDate(),
-                updatedPolicy.getNominee(),
-                updatedPolicy.getNomineeRelation(),
-                updatedPolicy.getGender(),
-                updatedPolicy.getDob(),
-                updatedPolicy.getAadhaarNumber(),
-                updatedPolicy.getAge()
-        );
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(mapToResponse(updatedPolicy));
     }
-
-
     @PutMapping("/activate-policy/{policyId}")
     public ResponseEntity<UserPolicyResponse> activatePolicy(@PathVariable Long policyId) {
         UserPolicy updated = adminService.activatePolicy(policyId);
-
-        UserPolicyResponse response = new UserPolicyResponse(
-                updated.getId(),
-                updated.getUserId(),
-                updated.getUserName(),
-                updated.getPolicyStatus(),
-                updated.getStartDate(),
-                updated.getEndDate(),
-                updated.getNominee(),
-                updated.getNomineeRelation(),
-                updated.getGender(),
-                updated.getDob(),
-                updated.getAadhaarNumber(),
-                updated.getAge()
-        );
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(mapToResponse(updated));
     }
-
 
     @PutMapping("/reject-policy/{policyId}")
     public ResponseEntity<UserPolicyResponse> rejectPolicy(@PathVariable Long policyId) {
         UserPolicy updated = adminService.rejectPolicy(policyId);
-
-        UserPolicyResponse response = new UserPolicyResponse(
-                updated.getId(),
-                updated.getUserId(),
-                updated.getUserName(),
-                updated.getPolicyStatus(),
-                updated.getStartDate(),
-                updated.getEndDate(),
-                updated.getNominee(),
-                updated.getNomineeRelation(),
-                updated.getGender(),
-                updated.getDob(),
-                updated.getAadhaarNumber(),
-                updated.getAge()
-        );
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(mapToResponse(updated));
     }
-
     @GetMapping("/pending-policies/{adminId}")
     public ResponseEntity<?> getPendingPoliciesByAdminId(@PathVariable Long adminId) {
         List<UserPolicy> pendingPolicies = userPolicyService.getPendingPoliciesByAdminId(adminId);
@@ -336,7 +313,6 @@ public class AdminController {
 
         return ResponseEntity.ok(pendingPolicies);
     }
-
     @GetMapping("/active-policies/{adminId}")
     public ResponseEntity<?> getActivePoliciesByAdminId(@PathVariable Long adminId) {
         List<UserPolicy> activePolicies = userPolicyService.getActivePoliciesByAdminId(adminId);
@@ -347,13 +323,6 @@ public class AdminController {
         }
 
         return ResponseEntity.ok(activePolicies);
-    }
-
-
-
-    @Scheduled(cron = "0 0 0 * * ?")
-    public void expirePolicies() {
-        adminService.expireExpiredPolicies();
     }
 
 
