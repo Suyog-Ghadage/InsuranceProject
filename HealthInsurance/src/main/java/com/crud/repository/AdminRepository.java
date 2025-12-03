@@ -1,3 +1,4 @@
+
 package com.crud.repository;
 
 import com.crud.entity.Admin;
@@ -7,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AdminRepository extends JpaRepository<Admin, Long> {
-    Optional<Admin> findByEmail(String email);
-    Optional<Admin> findByPanNumber(String panNumber);
     List<Admin> findByRole(Role role);
+    boolean existsByEmail(String email);
+    Optional<Admin> findByEmail(String email);
 }

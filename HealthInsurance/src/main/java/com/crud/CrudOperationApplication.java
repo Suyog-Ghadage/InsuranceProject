@@ -21,22 +21,30 @@ public class CrudOperationApplication {
 	private PasswordEncoder passwordEncoder;
 
 	@Bean
-	CommandLineRunner createSuperAdmin(AdminRepository adminRepository, PasswordEncoder passwordEncoder) {
+	CommandLineRunner createSuperAdmin(AdminRepository adminRepository) {
 		return args -> {
+			String superAdminEmail = "ghadagesuyog3@gmail.com";
 
 			boolean superAdminExists = adminRepository.findByRole(Role.SUPER_ADMIN)
 					.stream().findAny().isPresent();
 
-			if (!superAdminExists) {
+			boolean emailExists = adminRepository.existsByEmail(superAdminEmail);
+
+			if (!superAdminExists && !emailExists) {
 				Admin superAdmin = new Admin();
-				superAdmin.setEmail("ghadagesuyog3@gmail.com");
-			  superAdmin.setUsername("SUPER_ADMIN");
+				superAdmin.setEmail(superAdminEmail);
+				superAdmin.setUsername("SUPER_ADMIN");
+				superAdmin.setRole(Role.SUPER_ADMIN);
 
 				String rawPassword = "SuperAdmin@123";
 				superAdmin.setPassword(passwordEncoder.encode(rawPassword));
 
 				adminRepository.save(superAdmin);
-				System.out.println(" SUPER_ADMIN created successfully!");
+				System.out.println("SUPER_ADMIN created successfully!");
+			} else {
+				System.out.println("SUPER_ADMIN not created: "
+						+ (superAdminExists ? "SUPER_ADMIN role already exists. " : "")
+						+ (emailExists ? "Email already exists: " + superAdminEmail : ""));
 			}
 		};
 	}
