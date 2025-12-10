@@ -2,9 +2,11 @@ package com.crud.serviceimpl;
 
 import com.crud.dto.PurchaseRequest;
 import com.crud.entity.PolicyPlan;
+import com.crud.entity.User;
 import com.crud.entity.UserPolicy;
 import com.crud.repository.PolicyPlanRepository;
 import com.crud.repository.UserPolicyRepository;
+import com.crud.repository.UserRepository;
 import com.crud.service.UserPolicyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,14 +23,26 @@ public class UserPolicyImpl implements UserPolicyService {
     @Autowired
     private UserPolicyRepository userPolicyRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+
     @Override
     public UserPolicy purchasePolicy(PurchaseRequest request) {
+
+
         PolicyPlan plan = planRepository.findById(request.getPolicyId())
                 .orElseThrow(() -> new RuntimeException("Policy Plan not found"));
 
+        User user = userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + request.getUserId()));
+
+        String username = user.getUserName();
+
+
         UserPolicy userPolicy = UserPolicy.builder()
                 .userId(request.getUserId())
-                .userName(request.getUserName())
+                .userName(username)
                 .gender(request.getGender())
                 .dob(request.getDob())
                 .aadhaarNumber(request.getAadhaarNumber())
@@ -36,13 +50,14 @@ public class UserPolicyImpl implements UserPolicyService {
                 .policyPlan(plan)
                 .startDate(LocalDate.now())
                 .endDate(LocalDate.now().plusYears(plan.getDurationInYears()))
-                .policyStatus("PENDING") //  Initially pending
+                .policyStatus("PENDING")
                 .nominee(request.getNominee())
                 .nomineeRelation(request.getNomineeRelation())
                 .build();
 
         return userPolicyRepository.save(userPolicy);
     }
+
 
 
     @Override

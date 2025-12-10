@@ -10,18 +10,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="845bf92b-1c85-440b-bed8-5bacfa7b65cd" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/HealthInsurance/src/main/java/com/crud/dto/ForgotPasswordRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HealthInsurance/src/main/java/com/crud/dto/ResetPasswordRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/HealthInsurance/src/main/java/com/crud/dto/VerifyOtpRequest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HealthInsurance/src/main/java/com/crud/controller/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/src/main/java/com/crud/controller/AdminController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HealthInsurance/src/main/java/com/crud/entity/UserProfile.java" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/src/main/java/com/crud/entity/UserProfile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HealthInsurance/src/main/java/com/crud/serviceimpl/AppointmentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/src/main/java/com/crud/serviceimpl/AppointmentServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HealthInsurance/src/main/java/com/crud/serviceimpl/PolicyPlanImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/src/main/java/com/crud/serviceimpl/PolicyPlanImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HealthInsurance/src/main/java/com/crud/serviceimpl/UserProfileServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/src/main/java/com/crud/serviceimpl/UserProfileServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HealthInsurance/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/controller/AdminController.class" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/controller/AdminController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/entity/UserProfile.class" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/entity/UserProfile.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/serviceimpl/AppointmentServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/serviceimpl/AppointmentServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/serviceimpl/PolicyPlanImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/serviceimpl/PolicyPlanImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/serviceimpl/UserProfileServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/target/classes/com/crud/serviceimpl/UserProfileServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HealthInsurance/src/main/java/com/crud/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/src/main/java/com/crud/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HealthInsurance/src/main/java/com/crud/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/src/main/java/com/crud/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HealthInsurance/src/main/java/com/crud/serviceimpl/EmailServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/src/main/java/com/crud/serviceimpl/EmailServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HealthInsurance/src/main/java/com/crud/serviceimpl/UserImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/src/main/java/com/crud/serviceimpl/UserImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HealthInsurance/src/main/java/com/crud/serviceimpl/UserPolicyImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/HealthInsurance/src/main/java/com/crud/serviceimpl/UserPolicyImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

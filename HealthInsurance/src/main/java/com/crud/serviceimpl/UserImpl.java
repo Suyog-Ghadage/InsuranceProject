@@ -3,13 +3,16 @@ package com.crud.serviceimpl;
 import com.crud.entity.User;
 import com.crud.enums.Role;
 import com.crud.repository.UserRepository;
+import com.crud.service.EmailService;
 import com.crud.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
 
 @Service
 public class UserImpl implements UserService {
@@ -19,6 +22,9 @@ public class UserImpl implements UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private EmailService emailService;
 
     @Override
     public User createUser(User user) {
@@ -31,12 +37,10 @@ public class UserImpl implements UserService {
     @Override
     public User getUserById(Long userId) {
         return repository.findById(userId).get();
-
     }
 
     @Override
     public List<User> getAllUsers() {
-
         return repository.findAll();
     }
 
@@ -53,7 +57,6 @@ public class UserImpl implements UserService {
         } else {
             return null;
         }
-
     }
 
     @Override
@@ -65,5 +68,56 @@ public class UserImpl implements UserService {
     }
 
 
+    // FORGOT PASSWORD --------------------------
 
+    @Override
+    public boolean forgotPassword(String email) {
+        Optional<User> user = repository.findByEmail(email);
+
+        if(user.isPresent()){
+            String otp = String.valueOf((int)(Math.random()*900000)+100000);
+            User u = user.get();
+            u.setOtp(otp);
+            u.setOtpGeneratedAt(LocalDateTime.now());
+            u.setOtpVerified(false);
+
+            repository.save(u);
+
+            emailService.sendEmail(email, "Forgot Password OTP", "Your OTP is: " + otp);
+
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean verifyOtp(String email, String otp) {
+        Optional<User> user = repository.findByEmail(email);
+
+        if(user.isPresent() && otp.equals(user.get().getOtp())){
+            User u = user.get();
+            u.setOtpVerified(true);
+            repository.save(u);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean resetPassword(String email, String password) {
+        Optional<User> user = repository.findByEmail(email);
+
+        if(user.isPresent() && user.get().isOtpVerified()){
+            User u = user.get();
+            u.setPassword(passwordEncoder.encode(password));
+            u.setOtp(null);
+            u.setOtpVerified(false);
+            repository.save(u);
+
+            return true;
+        }
+
+        return false;
+    }
 }

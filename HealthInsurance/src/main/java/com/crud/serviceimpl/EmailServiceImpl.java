@@ -22,7 +22,7 @@ public class EmailServiceImpl implements EmailService {
             mailSender.send(message);
             System.out.println("Email sent successfully to: " + to);
         } catch (Exception e) {
-            System.err.println("❌ Failed to send email to: " + to);
+            System.err.println(" Failed to send email to: " + to);
             e.printStackTrace();
         }
     }
