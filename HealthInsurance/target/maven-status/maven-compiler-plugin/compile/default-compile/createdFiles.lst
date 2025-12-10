@@ -12,6 +12,7 @@ com/crud/serviceimpl/ClaimDocumentImpl.class
 com/crud/entity/Admin.class
 com/crud/service/HospitalService.class
 com/crud/service/UserService.class
+com/crud/dto/ResetPasswordRequest.class
 com/crud/entity/UserPolicy.class
 com/crud/enums/PolicyStatus.class
 com/crud/serviceimpl/ClaimImpl.class
@@ -53,6 +54,7 @@ com/crud/controller/AdminController$VerifyOtpRequest.class
 com/crud/dto/DoctorRequestDTO.class
 com/crud/confg/JwtAuthenticationEntryPoint.class
 com/crud/entity/Doctor.class
+com/crud/dto/ForgotPasswordRequest.class
 com/crud/dto/AdminLoginDto.class
 com/crud/controller/ContactFormController.class
 com/crud/serviceimpl/UserImpl.class
@@ -62,6 +64,7 @@ com/crud/entity/UserProfile.class
 com/crud/controller/ClaimController.class
 com/crud/controller/AdminProfileController.class
 com/crud/serviceimpl/UserPolicyImpl.class
+com/crud/dto/VerifyOtpRequest.class
 com/crud/dto/AppointmentRequest.class
 com/crud/serviceimpl/FAQServiceImpl.class
 com/crud/serviceimpl/AdminServiceImpl.class

@@ -23,6 +23,7 @@
 /Users/suyogghadage/Downloads/project/HealthInsurance/src/main/java/com/crud/dto/AdminResponse.java
 /Users/suyogghadage/Downloads/project/HealthInsurance/src/main/java/com/crud/dto/AppointmentRequest.java
 /Users/suyogghadage/Downloads/project/HealthInsurance/src/main/java/com/crud/dto/DoctorRequestDTO.java
+/Users/suyogghadage/Downloads/project/HealthInsurance/src/main/java/com/crud/dto/ForgotPasswordRequest.java
 /Users/suyogghadage/Downloads/project/HealthInsurance/src/main/java/com/crud/dto/LoginDto.java
 /Users/suyogghadage/Downloads/project/HealthInsurance/src/main/java/com/crud/dto/OtpRequest.java
 /Users/suyogghadage/Downloads/project/HealthInsurance/src/main/java/com/crud/dto/PasswordLoginRequest.java
@@ -31,8 +32,10 @@
 /Users/suyogghadage/Downloads/project/HealthInsurance/src/main/java/com/crud/dto/PolicyPlanResponse.java
 /Users/suyogghadage/Downloads/project/HealthInsurance/src/main/java/com/crud/dto/PolicyPlanWithBuyersResponse.java
 /Users/suyogghadage/Downloads/project/HealthInsurance/src/main/java/com/crud/dto/PurchaseRequest.java
+/Users/suyogghadage/Downloads/project/HealthInsurance/src/main/java/com/crud/dto/ResetPasswordRequest.java
 /Users/suyogghadage/Downloads/project/HealthInsurance/src/main/java/com/crud/dto/UserDetailsResponse.java
 /Users/suyogghadage/Downloads/project/HealthInsurance/src/main/java/com/crud/dto/UserPolicyResponse.java
+/Users/suyogghadage/Downloads/project/HealthInsurance/src/main/java/com/crud/dto/VerifyOtpRequest.java
 /Users/suyogghadage/Downloads/project/HealthInsurance/src/main/java/com/crud/entity/Admin.java
 /Users/suyogghadage/Downloads/project/HealthInsurance/src/main/java/com/crud/entity/AdminProfile.java
 /Users/suyogghadage/Downloads/project/HealthInsurance/src/main/java/com/crud/entity/Appointment.java
