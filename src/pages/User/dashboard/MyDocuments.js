@@ -112,7 +112,7 @@ export default function MyDocuments() {
     if (!confirmDelete) return;
 
     try {
-      await axios.delete(`http://localhost:8089/api/documents/${id}`);
+      await axios.delete(`${BASE_URL}/documents/${id}`);
 
       
       setDocuments((prev) => prev.filter((doc) => doc.documentId !== id));

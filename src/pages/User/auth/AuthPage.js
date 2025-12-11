@@ -3,6 +3,8 @@ import './Auth.css';
 import { register, login, verifyOtp } from '../../../services/auth';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from "../../../context/AuthContext";
+import axiosInstance from "../../../api/axios";
+
 
 export default function AuthPage() {
   const navigate = useNavigate();
@@ -20,7 +22,7 @@ export default function AuthPage() {
   const [message, setMessage] = useState('');
   const [validationErrors, setValidationErrors] = useState({});
   const [resendMessage, setResendMessage] = useState('');
-  const [resetPasswordError, setResetPasswordError] = useState(''); // new state
+  const [resetPasswordError, setResetPasswordError] = useState(''); 
 
   // -------------------------------
   // LOGIN OTP TIMER
@@ -178,18 +180,17 @@ export default function AuthPage() {
   const handleForgotPasswordSendOtp = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:8089/api/user/forgot-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: formData.email }),
-      });
+        const res = await axiosInstance.post("/user/forgot-password", {
+  email: formData.email,
+});
 
-      if (res.ok) {
-        alert("OTP sent to email");
-        setStep(4);
-      } else {
-        alert("Email not found");
-      }
+if (res.status === 200) {
+  alert("OTP sent to email");
+  setStep(4);
+} else {
+  alert("Email not found");
+}
+
     } catch {
       alert("Error sending OTP");
     }
@@ -201,21 +202,18 @@ export default function AuthPage() {
   const handleForgotPasswordVerifyOtp = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:8089/api/user/verify-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: formData.email,
-          otp: formData.otp,
-        }),
-      });
+        const res = await axiosInstance.post("/user/verify-otp", {
+  email: formData.email,
+  otp: formData.otp,
+});
 
-      if (res.ok) {
-        alert("OTP verified");
-        setStep(5); // Go to reset password
-      } else {
-        alert("Invalid OTP");
-      }
+if (res.status === 200) {
+  alert("OTP verified");
+  setStep(5);
+} else {
+  alert("Invalid OTP");
+}
+
     } catch {
       alert("Error verifying OTP");
     }
@@ -226,18 +224,17 @@ export default function AuthPage() {
   // -------------------------------
   const handleForgotPasswordResendOtp = async () => {
     try {
-      const res = await fetch("http://localhost:8089/api/user/forgot-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: formData.email }),
-      });
+      const res = await axiosInstance.post("/user/forgot-password", {
+  email: formData.email,
+});
 
-      if (res.ok) {
-        setResendMessage("OTP resent successfully!");
-        setFpResendCounter(prev => prev + 1);
-      } else {
-        setResendMessage("Failed to resend OTP");
-      }
+if (res.status === 200) {
+  setResendMessage("OTP resent successfully!");
+  setFpResendCounter(prev => prev + 1);
+} else {
+  setResendMessage("Failed to resend OTP");
+}
+
     } catch {
       setResendMessage("Error sending OTP");
     }
@@ -249,7 +246,6 @@ export default function AuthPage() {
   const handleForgotPasswordReset = async (e) => {
     e.preventDefault();
 
-    // Password validation
     const passwordError = validatePassword(formData.password);
     if (passwordError) {
       setResetPasswordError(passwordError);
@@ -258,22 +254,19 @@ export default function AuthPage() {
     setResetPasswordError('');
 
     try {
-      const res = await fetch("http://localhost:8089/api/user/reset-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: formData.email,
-          newPassword: formData.password,
-        }),
-      });
+      const res = await axiosInstance.post("/user/reset-password", {
+  email: formData.email,
+  newPassword: formData.password,
+});
 
-      if (res.ok) {
-        alert("Password updated successfully!");
-        setStep(1);
-        setFormData({ ...formData, password: '' });
-      } else {
-        alert("Failed to reset password");
-      }
+if (res.status === 200) {
+  alert("Password updated successfully!");
+  setStep(1);
+  setFormData({ ...formData, password: '' });
+} else {
+  alert("Failed to reset password");
+}
+
     } catch {
       alert("Error resetting password");
     }

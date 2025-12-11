@@ -23,7 +23,10 @@ axiosInstance.interceptors.request.use(
     if (
       !config.url.includes("/api/v1/save") && // registration
       !config.url.includes("/api/auth/login") && // login
-      !config.url.includes("/api/auth/verify-otp") // OTP verify
+      !config.url.includes("/api/auth/verify-otp") &&// OTP verify
+      !config.url.includes("/api/user/forgot-password") &&
+      !config.url.includes("/api/user/verify-otp") &&
+      !config.url.includes("/api/user/reset-password")
     ) {
       const authData = JSON.parse(sessionStorage.getItem("authData"));
       const token = authData?.token;
