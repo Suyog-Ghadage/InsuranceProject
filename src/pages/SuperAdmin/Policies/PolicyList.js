@@ -22,8 +22,8 @@ import axios from "axios";
 import { getAuthHeaders } from "../../../api/superAdminApi";
 import CONFIG from "../../../config/config";
 
-const API_BASE =CONFIG.BASE_URL;
- 
+const API_BASE = CONFIG.BASE_URL;
+
 export default function PolicyList() {
   const [tabValue, setTabValue] = useState(0);
   const [policies, setPolicies] = useState([]);
@@ -32,9 +32,7 @@ export default function PolicyList() {
   const [purchasedPolicies, setPurchasedPolicies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
- 
- 
- 
+
   // Fetch all admins for dropdown
   const fetchAdmins = async () => {
     try {
@@ -46,7 +44,7 @@ export default function PolicyList() {
       console.error("Failed to fetch admins:", err);
     }
   };
- 
+
   // Fetch all or admin-specific policies
   const fetchPolicies = async (adminId) => {
     setLoading(true);
@@ -56,7 +54,7 @@ export default function PolicyList() {
         adminId && adminId !== "all"
           ? `${API_BASE}/admin-policy/${adminId}/policy-plans`
           : `${API_BASE}/admin-policy/policy-plans/all`;
- 
+
       const response = await axios.get(url, { headers: getAuthHeaders() });
       if (Array.isArray(response.data)) {
         setPolicies(response.data);
@@ -71,7 +69,7 @@ export default function PolicyList() {
       setLoading(false);
     }
   };
- 
+
   // Fetch purchased policies
   const fetchPurchasedPolicies = async () => {
     setLoading(true);
@@ -93,26 +91,26 @@ export default function PolicyList() {
       setLoading(false);
     }
   };
- 
+
   useEffect(() => {
     fetchAdmins();
     fetchPolicies();
   }, []);
- 
+
   useEffect(() => {
     if (selectedAdmin !== null) fetchPolicies(selectedAdmin);
   }, [selectedAdmin]);
- 
+
   useEffect(() => {
     if (tabValue === 1) fetchPurchasedPolicies();
   }, [tabValue]);
- 
+
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h5" sx={{ mb: 2 }}>
         🛡️ Policies Section
       </Typography>
- 
+
       <Tabs
         value={tabValue}
         onChange={(e, newValue) => setTabValue(newValue)}
@@ -123,13 +121,13 @@ export default function PolicyList() {
         <Tab label="All Policies" />
         <Tab label="Purchased Policies" />
       </Tabs>
- 
+
       {errorMsg && (
         <Alert severity="error" sx={{ mb: 2 }}>
           {errorMsg}
         </Alert>
       )}
- 
+
       {loading ? (
         <Box sx={{ display: "flex", justifyContent: "center", py: 5 }}>
           <CircularProgress />
@@ -153,7 +151,7 @@ export default function PolicyList() {
                   ))}
                 </Select>
               </FormControl>
- 
+
               <TableContainer component={Paper}>
                 <Table>
                   <TableHead>
@@ -168,13 +166,13 @@ export default function PolicyList() {
                   </TableHead>
                   <TableBody>
                     {policies.map((p, index) => (
-                    <TableRow key={p.id}>
-                    <TableCell>{index + 1}</TableCell>
+                      <TableRow key={p.id}>
+                        <TableCell>{index + 1}</TableCell>
                         <TableCell>{p.policyName}</TableCell>
                         <TableCell>₹{p.coverage?.toLocaleString()}</TableCell>
                         <TableCell>₹{p.premium?.toLocaleString()}</TableCell>
                         <TableCell>{p.durationInYears}</TableCell>
-                        <TableCell>{p.admin?.username || "N/A"}</TableCell>
+                        <TableCell>{p.admin?.username }</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -182,14 +180,15 @@ export default function PolicyList() {
               </TableContainer>
             </>
           )}
- 
+
           {tabValue === 1 && (
             <TableContainer component={Paper}>
               <Table>
                 <TableHead>
                   <TableRow>
-                      <TableCell><strong>Sr. No.</strong></TableCell>
-                     <TableCell><strong>Policy Name</strong></TableCell>
+                    <TableCell><strong>Sr. No.</strong></TableCell>
+                    <TableCell><strong>Username</strong></TableCell> 
+                    <TableCell><strong>Policy Name</strong></TableCell>
                     <TableCell><strong>Policy Status</strong></TableCell>
                     <TableCell><strong>Start Date</strong></TableCell>
                     <TableCell><strong>End Date</strong></TableCell>
@@ -198,10 +197,11 @@ export default function PolicyList() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                   {purchasedPolicies.map((p, idx) => (
-                     <TableRow key={idx}>
+                  {purchasedPolicies.map((p, idx) => (
+                    <TableRow key={idx}>
                       <TableCell>{idx + 1}</TableCell>
-                     <TableCell>{p.policyName}</TableCell>
+                      <TableCell>{p.userName}</TableCell> 
+                      <TableCell>{p.policyName}</TableCell>
                       <TableCell>{p.policyStatus}</TableCell>
                       <TableCell>{p.startDate}</TableCell>
                       <TableCell>{p.endDate}</TableCell>
@@ -218,4 +218,3 @@ export default function PolicyList() {
     </Box>
   );
 }
- 

@@ -33,8 +33,83 @@
   border: 1px solid #ccc;
   border-radius: 6px;
   background: rgba(255, 255, 255, 0.9);
+  transition: all 0.3s ease;
 }
 
+.auth-form input:focus {
+  outline: none;
+  border-color: #1976d2;
+  box-shadow: 0 0 6px rgba(25, 118, 210, 0.3);
+}
+
+/* ------------------- */
+/* OTP Verification Styles */
+/* ------------------- */
+.auth-form input[name="otp"] {
+  width: 100%;
+  padding: 14px 12px;
+  margin-bottom: 12px;
+  border: 2px solid #1976d2;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.auth-form input[name="otp"]:focus {
+  border-color: #115293;
+  box-shadow: 0 0 8px rgba(25, 118, 210, 0.4);
+}
+
+/* Verify Button */
+.auth-form button[type="submit"] {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(90deg, #1976d2, #115293);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 10px;
+}
+
+.auth-form button[type="submit"]:hover {
+  background: linear-gradient(90deg, #115293, #0d1f50);
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.4);
+}
+
+/* OTP Timer Text */
+.otp-timer {
+  font-size: 14px;
+  margin-bottom: 10px;
+  font-weight: 500;
+  color: #1976d2;
+}
+
+/* Resend OTP Link */
+.resend-otp-text {
+  font-size: 14px;
+  margin-top: 5px;
+  text-align: center;
+}
+
+.resend-otp-text .fake-link {
+  color: #1976d2;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.resend-otp-text .fake-link:hover {
+  color: #115293;
+}
+
+/* General Auth Styles */
 .auth-form button {
   width: 100%;
   padding: 12px;
@@ -85,10 +160,4 @@
 .resend-otp-text {
   margin-top: 10px;
   font-size: 14px;
-}
-
-.fake-link {
-  color: blue;
-  cursor: pointer;
-  text-decoration: underline;
 }

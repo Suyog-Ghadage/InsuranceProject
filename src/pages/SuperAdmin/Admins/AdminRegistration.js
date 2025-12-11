@@ -149,8 +149,8 @@ export default function AdminRegistration() {
 
       <form onSubmit={handleSubmit}>
         <TextField
-          label="Username"
-          name="username"
+          label="Name"
+          name="name"
           value={formData.username}
           onChange={handleChange}
           fullWidth

@@ -8,18 +8,26 @@
 .why-choose-wrapper {
   display: flex;
   justify-content: space-between;
+  align-items: center; 
   gap: 60px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
+/* LEFT SIDE — perfectly centered to card grid */
 .why-choose-left {
-  flex: 1 1 35%;
+  width: 35%;
+  flex-shrink: 0;
+
   display: flex;
   align-items: center;
+  height: 100%;
+
+  
+  padding-top: 20px;
 }
 
 .why-choose-left h2 {
-  font-size: 2.2rem;
+  font-size: 2.3rem;
   line-height: 1.4;
   font-weight: 600;
 }
@@ -28,33 +36,34 @@
   color: #0073e6;
 }
 
+/* RIGHT SIDE — card grid */
 .why-choose-right {
-  flex: 1 1 60%;
+  width: 60%;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 30px;
+  gap: 32px; /* slightly increased spacing for better balance */
 }
 
 .why-card {
   background-color: white;
-  padding: 24px;
-  border-radius: 12px;
+  padding: 26px;
+  border-radius: 14px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border-left: 5px solid transparent;
+  border-left: 6px solid transparent;
   cursor: pointer;
 }
 
 .why-card h4 {
   margin-bottom: 12px;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 600;
 }
 
 .why-card p {
   font-size: 0.95rem;
   color: #444;
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 /* Hover animation */
@@ -63,24 +72,22 @@
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
 }
 
-/* Different border colors for each card */
-.why-card.one {
-  border-left-color: #0073e6;
-}
-.why-card.two {
-  border-left-color: #00bcd4;
-}
-.why-card.three {
-  border-left-color: #4caf50;
-}
-.why-card.four {
-  border-left-color: #ff9800;
-}
+/* Border colors */
+.why-card.one { border-left-color: #0073e6; }
+.why-card.two { border-left-color: #00bcd4; }
+.why-card.three { border-left-color: #4caf50; }
+.why-card.four { border-left-color: #ff9800; }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .why-choose-wrapper {
     flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .why-choose-left,
+  .why-choose-right {
+    width: 100%;
   }
 
   .why-choose-right {
@@ -88,6 +95,6 @@
   }
 
   .why-choose-left h2 {
-    font-size: 1.8rem;
+    font-size: 1.9rem;
   }
 }

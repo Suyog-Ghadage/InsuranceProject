@@ -1,88 +1,105 @@
-
-body {
-  font-family: 'Poppins', sans-serif;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* Smooth fade animation */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-
 
 .intro-banner-wrapper {
-  background-color: #f0f8ff;
-  width: 100vw;
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-  padding: 1px 0 10px; 
-}
-
-/* Centered content container */
-.intro-banner {
-  max-width: 1200px;
-  margin: 0 auto;
+  width: 100%;
+  padding: 70px 20px;
+  background: linear-gradient(135deg, #e3f2ff, #f7fbff);
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+}
+
+/* Rounded container + shadow */
+.intro-banner {
+  width: 100%;
+  max-width: 1200px;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 50px 50px;
+  display: flex;
   align-items: center;
-  padding: 0 20px;
-  box-sizing: border-box;
+  justify-content: center;
+  gap: 50px;
+  box-shadow: 0px 12px 28px rgba(0, 0, 0, 0.08);
+  animation: fadeInUp 0.8s ease-out;
 }
 
-/* Left content */
-.banner-left {
+/* Equal sides — perfect symmetry */
+.banner-left,
+.banner-right {
   flex: 1;
-  padding-right: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
+/* Text styles */
 .banner-left h1 {
-  font-size: 1.80rem;
-  margin-bottom: 20px;
+  font-size: 2.2rem;
+  font-weight: 600;
   color: #002d5f;
-  font-weight: 500;
+  margin-bottom: 20px;
+  line-height: 1.3;
+  animation: fadeInUp 1s ease-out;
 }
 
 .banner-left p {
-  font-size: 1.5rem;
-  margin-bottom: 25px;
-  color: #444;
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 30px;
   font-weight: 300;
+  animation: fadeInUp 1.2s ease-out;
 }
 
+/* Button – minimal + modern */
 .banner-btn {
-  display: inline-block;
-  background-color: #007bff;
+  width: fit-content;
+  background: #007bff;
+  padding: 12px 26px;
+  border-radius: 8px;
   color: white;
-  padding: 12px 24px;
-  border-radius: 6px;
+  font-weight: 500;
   text-decoration: none;
-  transition: background-color 0.3s ease;
-  font-weight: 400;
+  transition: 0.3s ease;
+  animation: fadeInUp 1.4s ease-out;
 }
 
 .banner-btn:hover {
-  background-color: #0056b3;
+  background: #005ecb;
+  transform: translateY(-2px);
 }
 
-/* Right image */
+/* Image section */
+.banner-right {
+  align-items: center;
+}
+
 .banner-right img {
   width: 100%;
-  max-width: 450px;
+  max-width: 430px;
   height: auto;
+  animation: fadeInUp 1.6s ease-out;
 }
 
-/* Responsive */
+/* Responsive (Mobile) */
 @media screen and (max-width: 768px) {
   .intro-banner {
     flex-direction: column;
     text-align: center;
+    padding: 40px 25px;
+    gap: 30px;
   }
 
-  .banner-left {
-    padding-right: 0;
-  }
-
-  .banner-right {
-    margin-top: 30px;
+  .banner-right img {
+    max-width: 330px;
   }
 }

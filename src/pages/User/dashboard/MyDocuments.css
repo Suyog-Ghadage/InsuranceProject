@@ -41,7 +41,7 @@
   border: 1px solid #a3b6e4;
 }
 
-.my-documents-container button {
+.my-documents-container button:not(.delete-btn) {
   background-color: #2a4d8f;
   color: white;
   padding: 10px 0;
@@ -84,6 +84,23 @@
 
 .my-documents-container li a:hover {
   text-decoration: underline;
+}
+
+/* Delete Button */
+.delete-btn {
+  background: #ff4d4d;
+  color: #100202;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  margin-left: 6px;
+}
+
+.delete-btn:hover {
+  background: #d93636;
 }
 
 /* Animation */

@@ -104,6 +104,26 @@ export default function MyDocuments() {
     }
   };
 
+  // ============================================
+  // Delete Document
+  // ============================================
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this document?");
+    if (!confirmDelete) return;
+
+    try {
+      await axios.delete(`http://localhost:8089/api/documents/${id}`);
+
+      
+      setDocuments((prev) => prev.filter((doc) => doc.documentId !== id));
+
+      alert("Document deleted successfully!");
+    } catch (err) {
+      console.error("Delete error:", err);
+      alert("Failed to delete document");
+    }
+  };
+
   return (
     <div className="my-documents-container">
       <h2>Upload Document</h2>
@@ -132,22 +152,30 @@ export default function MyDocuments() {
             <li key={doc.documentId}>
               {doc.documentName} ({doc.originalFileName}) —{" "}
               {doc.uploadedAt}
-              &nbsp;
-              <a
-                href={`${BASE_URL}/documents/view/${doc.documentId}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                View
-              </a>{" "}
-              |{" "}
-              <a
-                href={`${BASE_URL}/documents/download/${doc.documentId}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Download
-              </a>
+              <div style={{ marginTop: "6px" }}>
+                <a
+                  href={`${BASE_URL}/documents/view/${doc.documentId}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View
+                </a>{" "}
+                |{" "}
+                <a
+                  href={`${BASE_URL}/documents/download/${doc.documentId}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Download
+                </a>{" "}
+                |{" "}
+                <button
+                  className="delete-btn"
+                  onClick={() => handleDelete(doc.documentId)}
+                >
+                  Delete
+                </button>
+              </div>
             </li>
           ))}
         </ul>

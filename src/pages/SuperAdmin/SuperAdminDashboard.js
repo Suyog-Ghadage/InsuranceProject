@@ -61,7 +61,7 @@ export default function SuperAdminDashboard() {
   
   const fetchPoliciesCount = async () => {
     try {
-      const res = await fetch(`${CONFIG.BASE_URL}/admin/policy-plans/all`);
+      const res = await fetch(`${CONFIG.BASE_URL}/admin-policy/policy-plans/all`);
       if (!res.ok) throw new Error("Failed to fetch policies");
 
       const data = await res.json();
