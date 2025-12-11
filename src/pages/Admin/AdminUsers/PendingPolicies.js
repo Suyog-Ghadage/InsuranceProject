@@ -25,6 +25,20 @@ export default function PendingPolicies() {
 
   const BASE_URL = CONFIG.BASE_URL;
 
+  // ✔ UNIVERSAL function to get user name safely
+  const getUserName = (p) => {
+    if (!p) return "N/A";
+
+    if (p.userName) return p.userName; // direct
+    if (p.user?.userName) return p.user.userName; // nested
+    if (p.user?.name) return p.user.name;
+    if (p.user?.fullName) return p.user.fullName;
+    if (p.user?.firstName && p.user?.lastName)
+      return `${p.user.firstName} ${p.user.lastName}`;
+
+    return "N/A";
+  };
+
   const fetchPendingPolicies = async () => {
     try {
       setLoading(true);
@@ -90,6 +104,7 @@ export default function PendingPolicies() {
           <TableHead>
             <TableRow className="pending-header-row">
               <TableCell className="pending-header-cell">Sr.No</TableCell>
+              <TableCell className="pending-header-cell">User Name</TableCell>
               <TableCell className="pending-header-cell">Policy Name</TableCell>
               <TableCell className="pending-header-cell">Policy Type</TableCell>
               <TableCell className="pending-header-cell">Coverage</TableCell>
@@ -105,7 +120,7 @@ export default function PendingPolicies() {
           <TableBody>
             {policies.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={10} className="pending-nodata-cell">
+                <TableCell colSpan={11} className="pending-nodata-cell">
                   ❌ No pending policies found.
                 </TableCell>
               </TableRow>
@@ -122,29 +137,42 @@ export default function PendingPolicies() {
                     <TableCell className="pending-body-cell">
                       {index + 1}
                     </TableCell>
+
+                    {/* ✔ USER NAME COLUMN */}
+                    <TableCell className="pending-body-cell">
+                      {getUserName(p)}
+                    </TableCell>
+
                     <TableCell className="pending-body-cell">
                       {p.policyPlan?.policyName || "N/A"}
                     </TableCell>
+
                     <TableCell className="pending-body-cell">
                       {p.policyPlan?.policyType?.name ||
                         p.policyPlan?.policyType ||
                         "N/A"}
                     </TableCell>
+
                     <TableCell className="pending-body-cell">
                       {coverage}
                     </TableCell>
+
                     <TableCell className="pending-body-cell">
                       {p.startDate || "N/A"}
                     </TableCell>
+
                     <TableCell className="pending-body-cell">
                       {p.endDate || "N/A"}
                     </TableCell>
+
                     <TableCell className="pending-body-cell">
                       {p.nominee || "N/A"}
                     </TableCell>
+
                     <TableCell className="pending-body-cell">
                       {p.nomineeRelation || "N/A"}
                     </TableCell>
+
                     <TableCell className="pending-body-cell">
                       {p.policyStatus}
                     </TableCell>
@@ -184,7 +212,7 @@ export default function PendingPolicies() {
   );
 }
 
-/* ---------------- CSS (WORKS 100%) ---------------- */
+/* ---------------- CSS ---------------- */
 
 const css = `
 .pending-container {

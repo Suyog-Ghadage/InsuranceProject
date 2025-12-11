@@ -53,18 +53,29 @@ export default function AdminProfileForm() {
     .matches(/^[6-9]\d{9}$/, "Enter a valid 10-digit Indian phone number"),
 
   dateOfBirth: Yup.date()
-    .required("Date of birth is required")
-    .max(new Date(), "Date of birth cannot be in the future")
-    .test(
-      "age-limit",
-      "Admin must be at least 18 years old",
-      function (value) {
-        if (!value) return false;
-        const today = new Date();
-        const age = today.getFullYear() - value.getFullYear();
-        return age >= 18;
+  .required("Date of birth is required")
+  .max(new Date(), "Date of birth cannot be in the future")
+  .test(
+    "age-limit",
+    "Admin must be between 18 and 85 years old",
+    function (value) {
+      if (!value) return false;
+
+      const today = new Date();
+      const birthDate = new Date(value);
+      const age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      const dayDiff = today.getDate() - birthDate.getDate();
+
+      // Adjust age if birth month/day hasn't occurred yet this year
+      let adjustedAge = age;
+      if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+        adjustedAge--;
       }
-    ),
+
+      return adjustedAge >= 18 && adjustedAge <= 85;
+    }
+  ),
 
   companyName: Yup.string()
     .trim()
@@ -102,16 +113,19 @@ export default function AdminProfileForm() {
     .required("Permanent address is required"),
 
   city: Yup.string()
-    .trim()
-    .required("City is required"),
+  .matches(/^[A-Za-z ]+$/, "Only alphabets allowed")
+  .trim()
+  .required("City is required"),
 
-  state: Yup.string()
-    .trim()
-    .required("State is required"),
+state: Yup.string()
+  .matches(/^[A-Za-z ]+$/, "Only alphabets allowed")
+  .trim()
+  .required("State is required"),
 
-  country: Yup.string()
-    .trim()
-    .required("Country is required"),
+country: Yup.string()
+  .matches(/^[A-Za-z ]+$/, "Only alphabets allowed")
+  .trim()
+  .required("Country is required"),
 
     pinCode: Yup.string()
     .trim()

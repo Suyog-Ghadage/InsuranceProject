@@ -9,7 +9,6 @@ const AvailablePolicies = () => {
   const [policy, setPolicy] = useState(null);
   const [showNomineeForm, setShowNomineeForm] = useState(false);
 
-  // New Fields
   const [nominee, setNominee] = useState("");
   const [nomineeRelation, setNomineeRelation] = useState("");
   const [gender, setGender] = useState("");
@@ -48,19 +47,59 @@ const AvailablePolicies = () => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!nominee.trim()) newErrors.nominee = "Nominee name is required";
-    if (!nomineeRelation.trim()) newErrors.nomineeRelation = "Relation is required";
-    if (!gender) newErrors.gender = "Select gender";
-    if (!dob) newErrors.dob = "DOB is required";
+    const nameRegex = /^[A-Za-z ]+$/; // only alphabets
+    const aadhaarRegex = /^[0-9]{12}$/;
 
-    if (!aadhaarNumber || aadhaarNumber.length !== 12) {
-      newErrors.aadhaarNumber = "Aadhaar must be 12 digits";
+    // Nominee Name
+    if (!nominee.trim()) {
+      newErrors.nominee = "Nominee name is required";
+    } else if (!nameRegex.test(nominee)) {
+      newErrors.nominee = "Only alphabets allowed (no numbers or special characters)";
     }
 
-    if (!age || age <= 0) newErrors.age = "Enter a valid age";
+    // Nominee Relation
+    if (!nomineeRelation.trim()) {
+      newErrors.nomineeRelation = "Relation is required";
+    } else if (!nameRegex.test(nomineeRelation)) {
+      newErrors.nomineeRelation = "Only alphabets allowed";
+    }
+
+    // Gender
+    if (!gender) newErrors.gender = "Select gender";
+
+    // DOB validation
+    if (!dob) {
+      newErrors.dob = "DOB is required";
+    } else {
+      const birthDate = new Date(dob);
+      const today = new Date();
+
+      if (birthDate > today) {
+        newErrors.dob = "DOB cannot be in the future";
+      } else {
+        const ageCalculated =
+          today.getFullYear() - birthDate.getFullYear() -
+          (today < new Date(today.getFullYear(), birthDate.getMonth(), birthDate.getDate()) ? 1 : 0);
+
+        if (ageCalculated < 18 || ageCalculated > 85) {
+          newErrors.dob = "Age must be between 18 and 85";
+        }
+      }
+    }
+
+    // Aadhaar
+    if (!aadhaarRegex.test(aadhaarNumber)) {
+      newErrors.aadhaarNumber = "Aadhaar must be exactly 12 digits (numbers only)";
+    }
+
+    // Age
+    if (!age) {
+      newErrors.age = "Age is required";
+    } else if (age < 18 || age > 85) {
+      newErrors.age = "Age must be between 18 and 85";
+    }
 
     setErrors(newErrors);
-
     return Object.keys(newErrors).length === 0;
   };
 
@@ -113,7 +152,6 @@ const AvailablePolicies = () => {
     <div className="available-policies-container">
       {successMessage && <div className="success-banner">{successMessage}</div>}
 
-      {/* Apply blur when form is open */}
       <div className={`policy-detail-card ${showNomineeForm ? "blur-bg" : ""}`}>
         <button className="close-btn" onClick={handleClose}>✖</button>
 
@@ -143,7 +181,6 @@ const AvailablePolicies = () => {
         </div>
       </div>
 
-      {/* ⭐ Nominee Popup Form */}
       {showNomineeForm && (
         <div className="nominee-popup">
           <div className="nominee-box">

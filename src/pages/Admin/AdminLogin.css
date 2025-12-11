@@ -30,28 +30,33 @@
   animation: fadeIn 0.6s ease;
 }
 
-/* Close Button */
+/* Close Button - show only a black cross (no circle/background) */
 .auth-form2 .close-btn {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: #ccc;
-  color: #333;
+
+  /* Minimal styling so only the black cross is visible */
+  background: transparent;
+  color: #3f3d3d;
   border: none;
-  font-size: 18px;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
+  font-size: 20px;
+  line-height: 1;
+  width: auto;
+  height: auto;
+  border-radius: 0;
   cursor: pointer;
-  line-height: 28px;
-  text-align: center;
   padding: 0;
-  transition: background 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
+/* keep hover state simple (still just black cross) */
 .auth-form2 .close-btn:hover {
-  background: #999;
-  color: white;
+  background: transparent;
+  color: #000;
+  transform: none;
 }
 
 /* Headings */

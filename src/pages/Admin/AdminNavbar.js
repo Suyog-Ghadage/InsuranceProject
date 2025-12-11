@@ -7,10 +7,12 @@ export default function AdminNavbar() {
   const [showTooltip, setShowTooltip] = useState(false);
 
   const adminUsername = sessionStorage.getItem("adminUsername") || "Admin";
+  const adminEmail = sessionStorage.getItem("adminEmail") || "No Email";
 
   const handleLogout = () => {
     sessionStorage.removeItem("adminToken");
     sessionStorage.removeItem("adminUsername");
+    sessionStorage.removeItem("adminEmail");
     sessionStorage.removeItem("adminId");
     navigate("/admin/login");
   };
@@ -27,7 +29,13 @@ export default function AdminNavbar() {
         >
           <UserCircle size={28} style={styles.icon} />
 
-          {showTooltip && <div style={styles.tooltip}>{adminUsername}</div>}
+          {/* TOOLTIP WITH USERNAME + EMAIL */}
+          {showTooltip && (
+            <div style={styles.tooltip}>
+              <strong>{adminUsername}</strong>
+              <div style={{ fontSize: "12px", color: "#555" }}>{adminEmail}</div>
+            </div>
+          )}
         </div>
 
         <button style={styles.logoutBtn} onClick={handleLogout}>

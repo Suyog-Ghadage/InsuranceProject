@@ -19,17 +19,20 @@ const validationSchema = Yup.object({
     .min(3, "Policy Type must be at least 3 characters")
     .required("Policy Type is required"),
 
-  coverage: Yup.number()
-    .typeError("Coverage must be a number")
-    .positive("Coverage must be greater than 0")
-    .min(10000, "Minimum coverage ₹10,000")
-    .required("Coverage is required"),
+ coverage: Yup.number()
+  .typeError("Coverage must be a number")
+  .positive("Coverage must be greater than 0")
+  .min(10000, "Minimum coverage ₹10,000")
+  .max(1000000000, "Maximum coverage ₹10,00,00,000") // <-- Added
+  .required("Coverage is required"),
 
-  premium: Yup.number()
-    .typeError("Premium must be a number")
-    .positive("Premium must be greater than 0")
-    .min(100, "Minimum premium ₹100")
-    .required("Premium is required"),
+premium: Yup.number()
+  .typeError("Premium must be a number")
+  .positive("Premium must be greater than 0")
+  .min(100, "Minimum premium ₹100")
+  .max(100000000, "Maximum premium ₹1,00,00,000") // <-- Added
+  .required("Premium is required"),
+
 
   durationInYears: Yup.number()
     .typeError("Duration must be a number")

@@ -44,7 +44,6 @@ export default function ProfileInfo() {
     fetchUserProfile(authData.userId, authData.token);
   }, []);
 
-  
   const fetchUserProfile = async (userId, token) => {
     try {
       const data = await fetchUserProfileApi(userId, token);
@@ -53,25 +52,25 @@ export default function ProfileInfo() {
         setIsEditing(false);
         sessionStorage.setItem('userProfileId', data.id);
       } else {
-        setIsEditing(true); 
+        setIsEditing(true);
       }
     } catch (err) {
-       console.warn('Could not fetch profile, showing empty form');
-  setIsEditing(true);  // allow user to create/edit profile
-  setFormData({
-    id: '',
-    name: '',
-    phone: '',
-    dob: '',
-    gender: '',
-    correspondenceAddress: '',
-    permanentAddress: '',
-    maritalStatus: '',
-    occupation: '',
-    bloodGroup: '',
-    emergencyContact: '',
-    aadhaarNumber: '',
-  });
+      console.warn('Could not fetch profile, showing empty form');
+      setIsEditing(true);
+      setFormData({
+        id: '',
+        name: '',
+        phone: '',
+        dob: '',
+        gender: '',
+        correspondenceAddress: '',
+        permanentAddress: '',
+        maritalStatus: '',
+        occupation: '',
+        bloodGroup: '',
+        emergencyContact: '',
+        aadhaarNumber: '',
+      });
     }
   };
 
@@ -86,6 +85,36 @@ export default function ProfileInfo() {
         if (!value.trim()) newErrors.name = 'Name is required';
         else if (!/^[A-Za-z\s]+$/.test(value)) newErrors.name = 'Name must contain letters only';
         else delete newErrors.name;
+        break;
+
+      case "dob":
+        if (!value) {
+          newErrors.dob = "Date of birth is required";
+        } else {
+          const selected = new Date(value);
+          const today = new Date();
+
+          if (selected > today) {
+            newErrors.dob = "DOB cannot be in the future";
+          } else {
+            const age = today.getFullYear() - selected.getFullYear();
+            const monthDiff = today.getMonth() - selected.getMonth();
+            const dayDiff = today.getDate() - selected.getDate();
+
+            const actualAge =
+              monthDiff > 0 || (monthDiff === 0 && dayDiff >= 0)
+                ? age
+                : age - 1;
+
+            if (actualAge < 18) {
+              newErrors.dob = "You must be at least 18 years old";
+            }
+            else if (actualAge > 90) {
+              newErrors.dob = "Age cannot be more than 90 years";
+            }
+            else delete newErrors.dob;
+          }
+        }
         break;
 
       case 'phone':
@@ -106,6 +135,14 @@ export default function ProfileInfo() {
         if (!aadhaarValue) newErrors.aadhaarNumber = 'Aadhaar is required';
         else if (!/^[2-9]\d{11}$/.test(aadhaarValue)) newErrors.aadhaarNumber = 'Invalid Aadhaar number';
         else delete newErrors.aadhaarNumber;
+        break;
+
+      // ⭐ NEW VALIDATION: OCCUPATION
+      case 'occupation':
+        if (!value.trim()) newErrors.occupation = 'Occupation is required';
+        else if (!/^[A-Za-z\s]+$/.test(value))
+          newErrors.occupation = 'Occupation must contain letters only';
+        else delete newErrors.occupation;
         break;
 
       default:
@@ -141,6 +178,7 @@ export default function ProfileInfo() {
     const nameRegex = /^[A-Za-z\s]+$/;
     const phoneRegex = /^[6-9]\d{9}$/;
     const aadhaarRegex = /^[2-9]\d{11}$/;
+    const occupationRegex = /^[A-Za-z\s]+$/;
 
     if (!formData.name.trim()) newErrors.name = 'Name is required';
     else if (!nameRegex.test(formData.name.trim())) newErrors.name = 'Name must contain letters only';
@@ -153,10 +191,16 @@ export default function ProfileInfo() {
     if (!formData.correspondenceAddress) newErrors.correspondenceAddress = 'Required';
     if (!formData.permanentAddress) newErrors.permanentAddress = 'Required';
     if (!formData.maritalStatus) newErrors.maritalStatus = 'Select marital status';
-    if (!formData.occupation.trim()) newErrors.occupation = 'Required';
+
+    // ⭐ NEW VALIDATION: OCCUPATION
+    if (!formData.occupation.trim()) newErrors.occupation = 'Occupation is required';
+    else if (!occupationRegex.test(formData.occupation.trim()))
+      newErrors.occupation = 'Occupation must contain letters only';
+
     if (!formData.bloodGroup) newErrors.bloodGroup = 'Select blood group';
     if (formData.emergencyContact && !phoneRegex.test(formData.emergencyContact))
       newErrors.emergencyContact = 'Invalid 10-digit number';
+
     if (!formData.aadhaarNumber.trim()) newErrors.aadhaarNumber = 'Aadhaar is required';
     else if (!aadhaarRegex.test(formData.aadhaarNumber.trim())) newErrors.aadhaarNumber = 'Invalid Aadhaar number';
 
@@ -191,7 +235,6 @@ export default function ProfileInfo() {
     }
   };
 
-  // --- Icons & helpers ---
   const icons = {
     name: <FaUser />,
     phone: <FaPhone />,

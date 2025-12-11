@@ -74,7 +74,7 @@ export default function AdminLogin() {
           onClick={() => navigate("/")}
           title="Go to Home"
         >
-          ✖
+           ✖
         </button>
 
         <h2>{step === 1 ? "Admin Login" : "Verify OTP"}</h2>

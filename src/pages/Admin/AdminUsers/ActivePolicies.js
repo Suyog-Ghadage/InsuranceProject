@@ -44,7 +44,6 @@ export default function ActivePolicies() {
       const res = await axios.get(
         `${BASE_URL}/admin/active-policies/${adminId}`
       );
-
       if (Array.isArray(res.data)) {
         setPolicies(res.data);
       } else if (res.data?.policies) {
@@ -68,6 +67,18 @@ export default function ActivePolicies() {
     fetchActivePolicies();
   }, []);
 
+  // Safely get user name
+  const getUserName = (p) => {
+    if (!p) return "N/A";
+    if (p.userName) return p.userName;
+    if (p.user?.userName) return p.user.userName;
+    if (p.user?.name) return p.user.name;
+    if (p.user?.fullName) return p.user.fullName;
+    if (p.user?.firstName && p.user?.lastName)
+      return `${p.user.firstName} ${p.user.lastName}`;
+    return "N/A";
+  };
+
   // Open edit popup
   const handleEdit = (policy) => {
     setEditData({
@@ -78,10 +89,8 @@ export default function ActivePolicies() {
     setEditDialog(true);
   };
 
-  // Validate name: letters and spaces only
   const isValidName = (name) => /^[A-Za-z\s]+$/.test(name.trim());
 
-  // Save edit with validation
   const handleSaveEdit = async () => {
     if (!editData.nominee.trim() || !editData.relation.trim()) {
       setSnackbar({
@@ -131,7 +140,6 @@ export default function ActivePolicies() {
     }
   };
 
-  // Delete policy
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this policy?")) return;
 
@@ -165,6 +173,7 @@ export default function ActivePolicies() {
           <TableHead>
             <TableRow className="pending-header-row">
               <TableCell className="pending-header-cell">Sr.No</TableCell>
+              <TableCell className="pending-header-cell">User Name</TableCell>
               <TableCell className="pending-header-cell">Policy Name</TableCell>
               <TableCell className="pending-header-cell">Policy Type</TableCell>
               <TableCell className="pending-header-cell">Coverage</TableCell>
@@ -180,17 +189,14 @@ export default function ActivePolicies() {
           <TableBody>
             {policies.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={10} className="pending-nodata-cell">
+                <TableCell colSpan={11} className="pending-nodata-cell">
                   ❌ No Active Policies Found.
                 </TableCell>
               </TableRow>
             ) : (
               policies.map((p, index) => {
                 const coverage =
-                  p.coverageAmount ||
-                  p.sumAssured ||
-                  p.policyPlan?.coverage ||
-                  "N/A";
+                  p.coverageAmount || p.sumAssured || p.policyPlan?.coverage || "N/A";
 
                 let policyType = "N/A";
                 if (p.policyPlan?.policyType) {
@@ -204,6 +210,7 @@ export default function ActivePolicies() {
                 return (
                   <TableRow key={p.id} className="pending-body-row">
                     <TableCell className="pending-body-cell">{index + 1}</TableCell>
+                    <TableCell className="pending-body-cell">{getUserName(p)}</TableCell>
                     <TableCell className="pending-body-cell">{p.policyPlan?.policyName || "N/A"}</TableCell>
                     <TableCell className="pending-body-cell">{policyType}</TableCell>
                     <TableCell className="pending-body-cell">{coverage}</TableCell>
@@ -212,16 +219,11 @@ export default function ActivePolicies() {
                     <TableCell className="pending-body-cell">{p.nominee || "N/A"}</TableCell>
                     <TableCell className="pending-body-cell">{p.nomineeRelation || "N/A"}</TableCell>
                     <TableCell className="pending-body-cell">{p.policyStatus || "N/A"}</TableCell>
-
                     <TableCell className="pending-action-cell">
                       <Button onClick={() => handleEdit(p)} color="primary">
                         Edit
                       </Button>
-                      <Button
-                        onClick={() => handleDelete(p.id)}
-                        color="error"
-                        sx={{ ml: 1 }}
-                      >
+                      <Button onClick={() => handleDelete(p.id)} color="error" sx={{ ml: 1 }}>
                         Delete
                       </Button>
                     </TableCell>

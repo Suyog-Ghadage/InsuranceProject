@@ -6,21 +6,33 @@ export const getDashboardStats = async () => {
     const adminId = sessionStorage.getItem("adminId");
     const BASE_URL = "http://localhost:8089";
 
-    // 1️⃣ Total policies
+    // ---------- TOTAL POLICIES ----------
     const totalRes = await getPlansByAdmin(adminId);
-    const totalPolicies = totalRes.data.length;
+    const totalPolicies = Array.isArray(totalRes.data)
+      ? totalRes.data.length
+      : totalRes.data?.length || 0;
 
-    // 2️⃣ Pending policies
-    const pendingRes = await axios.get(`${BASE_URL}/api/admin/pending-policies/${adminId}`);
-    const pendingPolicies = Array.isArray(pendingRes.data)
-      ? pendingRes.data.length
-      : pendingRes.data?.policies?.length || 0;
+    // ---------- PENDING POLICIES ----------
+    const pendingRes = await axios.get(
+      `${BASE_URL}/api/admin/pending-policies/${adminId}`
+    );
+    const pendingPolicies =
+      Array.isArray(pendingRes.data)
+        ? pendingRes.data.length
+        : pendingRes.data?.policies?.length ||
+          pendingRes.data?.data?.length ||
+          0;
 
-    // 3️⃣ Active policies
-    const activeRes = await axios.get(`${BASE_URL}/api/admin/active-policies/${adminId}`);
-    const activePolicies = Array.isArray(activeRes.data)
-      ? activeRes.data.length
-      : activeRes.data?.policies?.length || 0;
+    // ---------- ACTIVE POLICIES ----------
+    const activeRes = await axios.get(
+      `${BASE_URL}/api/admin/active-policies/${adminId}`
+    );
+    const activePolicies =
+      Array.isArray(activeRes.data)
+        ? activeRes.data.length
+        : activeRes.data?.policies?.length ||
+          activeRes.data?.data?.length ||
+          0;
 
     return {
       totalPolicies,
